@@ -330,11 +330,16 @@ export default function MobileDiagnosticForm() {
     return (
         <div style={{
             width: "100%",
-            height: "100%",
+            height: "100dvh", // Use dynamic viewport height for mobile
             display: "flex",
             flexDirection: "column",
             padding: "0",
             overflow: "hidden",
+            position: "fixed", // Ensure it stays locked
+            top: 0,
+            left: 0,
+            zIndex: 100,
+            background: "var(--bg-main)"
         }}>
             {/* TOP BAR */}
             <div style={{
@@ -554,7 +559,7 @@ export default function MobileDiagnosticForm() {
 
             {/* BOTTOM NAVIGATION — fixed at bottom */}
             <div style={{
-                padding: "16px 24px",
+                padding: "16px 24px max(16px, env(safe-area-inset-bottom)) 24px",
                 borderTop: "1px solid var(--border)",
                 background: "var(--bg-main)",
                 flexShrink: 0,

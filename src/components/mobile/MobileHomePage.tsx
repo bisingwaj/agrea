@@ -107,7 +107,7 @@ function MobileHero() {
                         letterSpacing: "-0.01em",
                         marginBottom: "2px",
                     }}>
-                        Démarrer mon diagnostic
+                        {t("mobile.menu.start_diagnostic") || "Démarrer mon diagnostic"}
                     </p>
                     <p style={{
                         fontSize: "12px",
@@ -406,7 +406,7 @@ function MobileSectorList() {
                     }}
                 >
                     <ArrowRight size={14} />
-                    Lancer mon diagnostic
+                    {t("mobile.menu.start_diagnostic") || "Lancer mon diagnostic"}
                 </Link>
             </div>
         </section>
@@ -443,7 +443,7 @@ function MobileCTA() {
                 marginBottom: "12px",
                 lineHeight: "1.2",
             }}>
-                Prêt à être en règle ?
+                {t("report.cta_title") || "Prêt à être en règle ?"}
             </h2>
             <p style={{
                 fontSize: "14px",
@@ -452,7 +452,7 @@ function MobileCTA() {
                 marginBottom: "28px",
                 fontWeight: 400,
             }}>
-                Obtenez votre plan de conformité personnalisé en 2 minutes.
+                {t("report.cta_desc") || "Obtenez votre plan de conformité personnalisé en 2 minutes."}
             </p>
 
             <Link
@@ -472,7 +472,7 @@ function MobileCTA() {
                     letterSpacing: "-0.01em",
                 }}
             >
-                <span>Être rappelé gratuitement</span>
+                <span>{t("report.cta_btn") || "Être rappelé gratuitement"}</span>
                 <ArrowRight size={16} />
             </Link>
         </section>
@@ -508,10 +508,10 @@ function MobileFooter() {
 
             <div style={{ display: "flex", gap: "24px", marginBottom: "28px", flexWrap: "wrap" }}>
                 {[
-                    { href: "/evaluation", text: "Diagnostic" },
-                    { href: "/guides", text: "Guides" },
-                    { href: "/contact", text: "Contact" },
-                    { href: "/analyses", text: "Analyses" },
+                    { href: "/evaluation", text: t("mobile.nav.diagnostic") || "Diagnostic" },
+                    { href: "/guides", text: t("mobile.nav.guides") || "Guides" },
+                    { href: "/contact", text: t("nav.contact") || "Contact" },
+                    { href: "/analyses", text: t("mobile.nav.analyses") || "Analyses" },
                 ].map((link) => (
                     <Link
                         key={link.href}

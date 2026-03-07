@@ -305,9 +305,46 @@ export const en = {
         action: "Action",
         delay: "Deadline",
         days: "d.",
-        cta_title: "Agréa handles your compliance",
-        cta_desc: "An expert will call you back within 4 hours with a custom roadmap.",
-        cta_btn: "Request a free callback"
+        cta_title: "Agréa takes charge of your compliance",
+        cta_desc: "An expert will call you back within 4 hours with a tailored roadmap.",
+        cta_btn: "Get a free callback"
+    },
+    mobile: {
+        nav: {
+            home: "Home",
+            diagnostic: "Diagnostic",
+            guides: "Guides",
+            analyses: "Analysis",
+            about: "About"
+        },
+        menu: {
+            home: "Home",
+            popular_sectors: "Popular Sectors",
+            language: "Language",
+            start_diagnostic: "Start Diagnostic"
+        },
+        diagnostic: {
+            screen_sectors: "Your Company",
+            screen_size: "Structure & Size",
+            screen_situation: "Current Situation",
+            screen_objectives: "Your Objectives",
+            screen_documents: "Your Documents",
+            screen_contact: "Contact",
+            step: "Step",
+            choose_sector: "Choose a sector...",
+            choose_city: "Choose a city...",
+            type_structure: "Structure Type",
+            employee_count: "Number of employees",
+            check_docs_owned: "Check the documents you already own.",
+            select_objectives: "Select your compliance objectives.",
+            docs_already_obtained: "Documents already obtained for your sector.",
+            almost_done: "Almost done!",
+            receive_report: "Receive your personalized report on WhatsApp within 24h.",
+            back: "Back",
+            continue: "Continue",
+            generating: "Generating...",
+            get_report: "Get my report",
+            mandatory_fields: "These two fields are required to personalize your diagnostic."
+        }
     }
-
 };

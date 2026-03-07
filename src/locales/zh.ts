@@ -305,9 +305,46 @@ export const zh = {
         action: "应对行动",
         delay: "预计周期",
         days: "天",
-        cta_title: "Agréa 为您的合规保驾护航",
-        cta_desc: "资深专家将在4小时内回电，为您提供量身定制的合规路线图。",
-        cta_btn: "立即申请免费回电"
+        cta_title: "Agréa 负责您的合规事宜",
+        cta_desc: "专家将在 4 小时内致电给您，并提供量身定制的路线图。",
+        cta_btn: "免费获得回电"
+    },
+    mobile: {
+        nav: {
+            home: "首页",
+            diagnostic: "诊断",
+            guides: "指南",
+            analyses: "分析",
+            about: "关于"
+        },
+        menu: {
+            home: "首页",
+            popular_sectors: "热门行业",
+            language: "语言",
+            start_diagnostic: "开始诊断"
+        },
+        diagnostic: {
+            screen_sectors: "您的公司",
+            screen_size: "结构与规模",
+            screen_situation: "当前情况",
+            screen_objectives: "您的目标",
+            screen_documents: "您的文档",
+            screen_contact: "联系人",
+            step: "步骤",
+            choose_sector: "选择一个行业...",
+            choose_city: "选择一个城市...",
+            type_structure: "结构类型",
+            employee_count: "员工人数",
+            check_docs_owned: "勾选您已经拥有的文件。",
+            select_objectives: "选择您的合规目标。",
+            docs_already_obtained: "您所在行业已获得的文件。",
+            almost_done: "即将完成！",
+            receive_report: "在 24 小时内通过 WhatsApp 接收您的个性化报告。",
+            back: "返回",
+            continue: "继续",
+            generating: "生成中...",
+            get_report: "获取我的报告",
+            mandatory_fields: "这两个字段是个性化您的诊断所必需的。"
+        }
     }
-
 };

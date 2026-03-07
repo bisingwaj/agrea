@@ -183,14 +183,14 @@ export default function ContactPage() {
                                         <Clock size={14} /> {t("contact_page.time_lbl")}
                                     </span>
                                 </label>
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
                                     {TIME_SLOTS.map((slot) => (
                                         <button
                                             key={slot}
                                             type="button"
                                             onClick={() => setForm({ ...form, timeSlot: slot })}
                                             style={{
-                                                padding: "12px 18px",
+                                                padding: "12px 14px",
                                                 border: "1px solid " + (form.timeSlot === slot ? "var(--green-900)" : "var(--border)"),
                                                 borderRadius: "8px",
                                                 background: form.timeSlot === slot ? "rgba(16, 185, 129, 0.1)" : "var(--bg-card)",
@@ -200,6 +200,7 @@ export default function ContactPage() {
                                                 cursor: "pointer",
                                                 transition: "all 0.15s ease",
                                                 fontFamily: "Inter, sans-serif",
+                                                textAlign: "center",
                                             }}
                                         >
                                             {slot}

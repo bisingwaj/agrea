@@ -274,4 +274,40 @@ a:hover {
   .mobile-only {
     display: block !important;
   }
+
+  /* ── Universal mobile layout tokens ── */
+  .container {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+    max-width: 100% !important;
+  }
+
+  .section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+
+  /* Single-column grids */
+  .mobile-grid-1col {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mobile-grid-2col {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Inner page heroes */
+  .inner-hero {
+    padding-top: 64px !important;
+    padding-bottom: 48px !important;
+  }
+
+  /* Scale h1 / h2 on mobile */
+  .mobile-h1 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem) !important;
+  }
+
+  .mobile-h2 {
+    font-size: clamp(1.4rem, 5vw, 2rem) !important;
+  }
 }

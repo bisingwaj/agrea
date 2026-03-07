@@ -9,15 +9,15 @@ export default function GuidesCatalogPage() {
     const { t } = useTranslation();
 
     return (
-        <div style={{ minHeight: "100vh", paddingTop: "120px", paddingBottom: "100px", background: "var(--bg-main)" }}>
+        <div style={{ minHeight: "100vh", paddingTop: "clamp(64px, 10vw, 120px)", paddingBottom: "80px", background: "var(--bg-main)" }}>
             <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
 
                 {/* Header Section */}
-                <div style={{ textAlign: "center", marginBottom: "80px", maxWidth: "800px", margin: "0 auto 80px" }}>
-                    <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "64px", height: "64px", borderRadius: "50%", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", marginBottom: "24px" }}>
+                <div style={{ textAlign: "center", marginBottom: "48px", maxWidth: "800px", margin: "0 auto 48px" }}>
+                    <div className="desktop-only" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "64px", height: "64px", borderRadius: "50%", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", marginBottom: "24px" }}>
                         <Layers size={28} color="var(--white)" />
                     </div>
-                    <h1 style={{ fontSize: "48px", fontWeight: 700, color: "var(--white)", letterSpacing: "-0.03em", marginBottom: "24px", lineHeight: "1.1" }}>
+                    <h1 style={{ fontSize: "clamp(1.75rem, 8vw, 3rem)", fontWeight: 700, color: "var(--white)", letterSpacing: "-0.03em", marginBottom: "24px", lineHeight: "1.1" }}>
                         {t("guides.title")}
                     </h1>
                     <p style={{ fontSize: "18px", color: "var(--text-secondary)", lineHeight: "1.6" }}>
@@ -26,7 +26,7 @@ export default function GuidesCatalogPage() {
                 </div>
 
                 {/* Grid of Guides */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "24px" }}>
+                <div className="mobile-grid-1col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" }}>
                     {GUIDES_DATA.map((guide) => (
                         <Link
                             key={guide.id}
@@ -36,8 +36,8 @@ export default function GuidesCatalogPage() {
                                 flexDirection: "column",
                                 background: "var(--bg-card)",
                                 border: "1px solid var(--border)",
-                                borderRadius: "24px",
-                                padding: "40px 32px",
+                                borderRadius: "16px",
+                                padding: "clamp(24px, 4vw, 40px) clamp(20px, 4vw, 32px)",
                                 textDecoration: "none",
                                 transition: "all 0.3s ease",
                                 cursor: "pointer",

@@ -60,7 +60,7 @@ export default function AboutPage() {
                 }}
             />
             {/* Header / Hero */}
-            <div style={{ paddingTop: "140px", paddingBottom: "120px", position: "relative", overflow: "hidden" }}>
+            <div className="inner-hero" style={{ paddingTop: "140px", paddingBottom: "80px", position: "relative", overflow: "hidden" }}>
                 <Parallax offset={150} className="absolute inset-0 z-0 pointer-events-none">
                     <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "800px", height: "400px", background: "radial-gradient(ellipse, rgba(16, 185, 129, 0.08) 0%, transparent 60%)", filter: "blur(60px)" }}></div>
                 </Parallax>
@@ -94,10 +94,10 @@ export default function AboutPage() {
                         </div>
                     </FadeUp>
                     <StaggerReveal staggerDelay={0.15}>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", textAlign: "center" }}>
+                        <div className="mobile-grid-2col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", textAlign: "center" }}>
                             {STATS.map((s, i) => (
                                 <div key={i}>
-                                    <p style={{ fontSize: "56px", fontWeight: 600, color: "var(--white)", marginBottom: "8px", letterSpacing: "-0.03em" }}>{s.value}</p>
+                                    <p className="mobile-h1" style={{ fontSize: "56px", fontWeight: 600, color: "var(--white)", marginBottom: "8px", letterSpacing: "-0.03em" }}>{s.value}</p>
                                     <p style={{ fontSize: "14px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>{s.label}</p>
                                 </div>
                             ))}
@@ -106,10 +106,10 @@ export default function AboutPage() {
                 </div>
             </div>
 
-            <div className="container" style={{ paddingTop: "120px" }}>
+            <div className="container" style={{ paddingTop: "80px" }}>
 
                 {/* Values (Principles) */}
-                <div style={{ marginBottom: "160px" }}>
+                <div style={{ marginBottom: "80px" }}>
                     <FadeUp delay={0.1}>
                         <div style={{ textAlign: "center", marginBottom: "80px" }}>
                             <span className="label" style={{ display: "block", marginBottom: "16px" }}>{t("about.values_badge")}</span>
@@ -118,9 +118,9 @@ export default function AboutPage() {
                     </FadeUp>
 
                     <StaggerReveal staggerDelay={0.1}>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "32px" }}>
+                        <div className="mobile-grid-1col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
                             {VALUES.map((v, i) => (
-                                <div key={i} style={{ padding: "40px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "16px", transition: "all 0.3s ease" }} className="glow-card">
+                                <div key={i} style={{ padding: "28px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "16px", transition: "all 0.3s ease" }} className="glow-card">
                                     <span style={{ display: "inline-block", padding: "6px 14px", background: "rgba(16, 185, 129, 0.1)", color: "var(--green-900)", borderRadius: "100px", fontSize: "13px", fontWeight: 600, marginBottom: "24px" }}>0{i + 1}</span>
                                     <h3 style={{ marginBottom: "16px", fontSize: "20px", color: "var(--white)" }}>{v.title}</h3>
                                     <p style={{ fontSize: "15px", lineHeight: "1.7", color: "var(--text-secondary)" }}>{v.desc}</p>
@@ -157,7 +157,7 @@ export default function AboutPage() {
                 </div>
 
                 {/* Approach / Methodology */}
-                <div style={{ marginBottom: "160px" }}>
+                <div style={{ marginBottom: "80px" }}>
                     <FadeUp delay={0.1}>
                         <div style={{ textAlign: "center", marginBottom: "80px" }}>
                             <span className="label" style={{ display: "block", marginBottom: "16px" }}>{t("about.method_badge")}</span>
@@ -185,7 +185,7 @@ export default function AboutPage() {
                 </div>
 
                 {/* Institutions Logos Grid */}
-                <div style={{ marginBottom: "140px", textAlign: "center" }}>
+                <div style={{ marginBottom: "80px", textAlign: "center" }}>
                     <FadeUp>
                         <div style={{ maxWidth: "700px", margin: "0 auto 60px auto" }}>
                             <span className="label" style={{ display: "block", marginBottom: "16px" }}>{t("about.institutions_badge")}</span>
@@ -216,7 +216,7 @@ export default function AboutPage() {
 
                 {/* Contact Footer */}
                 <FadeUp delay={0.2}>
-                    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "60px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "24px", textAlign: "center", boxShadow: "0 20px 60px rgba(0, 0, 0, 0.4)" }} className="glow-card">
+                    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "clamp(32px, 5vw, 60px)", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: "24px", textAlign: "center", boxShadow: "0 20px 60px rgba(0, 0, 0, 0.4)" }} className="glow-card">
                         <span className="label" style={{ color: "var(--text-muted)", marginBottom: "24px", display: "inline-block", padding: "6px 16px", background: "rgba(255,255,255,0.05)", borderRadius: "100px", fontSize: "12px", letterSpacing: "0.05em", textTransform: "uppercase" }}>{t("about.contact_badge")}</span>
                         <p style={{ fontSize: "32px", fontWeight: 600, color: "var(--white)", marginBottom: "12px", letterSpacing: "-0.03em" }}>{t("about.contact_title")}</p>
                         <p style={{ fontSize: "16px", color: "var(--text-secondary)", marginBottom: "40px" }}>{t("about.tagline")}</p>

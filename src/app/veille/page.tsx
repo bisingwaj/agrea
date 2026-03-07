@@ -95,6 +95,7 @@ export default function VeillePage() {
 
                     {/* Plans */}
                     <div
+                        className="mobile-grid-1col"
                         style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
@@ -203,7 +204,7 @@ export default function VeillePage() {
             <section style={{ background: "var(--bg-card)", padding: "64px 0", borderTop: "1px solid var(--border)" }}>
                 <div className="container">
                     <p className="label" style={{ marginBottom: "20px", color: "var(--green-900)" }}>{t("veille.how_badge")}</p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "32px" }}>
+                    <div className="mobile-grid-1col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "32px" }}>
                         {[
                             { step: "01", title: t("veille.how_1_title"), desc: t("veille.how_1_desc") },
                             { step: "02", title: t("veille.how_2_title"), desc: t("veille.how_2_desc") },

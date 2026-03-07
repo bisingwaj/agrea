@@ -51,7 +51,7 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
 
             {/* Breadcrumb */}
             <div style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-card)" }}>
-                <div style={{ padding: "16px 62px", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", maxWidth: "100%", margin: "0 auto" }}>
+                <div style={{ padding: "16px clamp(20px, 5vw, 62px)", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", maxWidth: "100%", margin: "0 auto" }}>
                     <Link href="/" style={{ color: "var(--text-muted)", fontSize: "13px", textDecoration: "none" }}>Accueil</Link>
                     <ChevronRight size={14} color="var(--text-muted)" />
                     <span style={{ color: "var(--white)", fontSize: "13px", fontWeight: 500 }}>{sector.name}</span>
@@ -59,7 +59,7 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
             </div>
 
             <section className="section" style={{ padding: "80px 0" }}>
-                <div style={{ padding: "0 62px", maxWidth: "100%", margin: "0 auto" }}>
+                <div style={{ padding: "0 clamp(20px, 5vw, 62px)", maxWidth: "100%", margin: "0 auto" }}>
                     {/* Header */}
                     <Link
                         href="/#secteurs"
@@ -70,13 +70,13 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
 
                     <div style={{ maxWidth: "800px", marginBottom: "48px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
-                            <h1 style={{ fontSize: "48px", fontWeight: 600, letterSpacing: "-0.02em", color: "var(--white)", margin: 0 }}>{sector.name}</h1>
+                            <h1 style={{ fontSize: "clamp(1.75rem, 7vw, 3rem)", fontWeight: 600, letterSpacing: "-0.02em", color: "var(--white)", margin: 0 }}>{sector.name}</h1>
                         </div>
                         <p style={{ fontSize: "20px", color: "var(--text-secondary)", lineHeight: "1.6" }}>{sector.description}</p>
                     </div>
 
                     {/* Right column (now Top Block CTA) */}
-                    <div style={{ background: "var(--bg-card)", borderRadius: "16px", border: "1px solid var(--border)", padding: "40px", marginBottom: "64px", display: "flex", alignItems: "center", gap: "48px", flexWrap: "wrap" }}>
+                    <div style={{ background: "var(--bg-card)", borderRadius: "16px", border: "1px solid var(--border)", padding: "clamp(24px, 4vw, 40px)", marginBottom: "48px", display: "flex", alignItems: "center", gap: "48px", flexWrap: "wrap" }}>
                         <div style={{ flex: "1 1 400px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
                                 <div style={{ width: "48px", height: "48px", background: "var(--green-900)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>

@@ -14,7 +14,7 @@ export default function AnalysesPage() {
         <main style={{ background: "var(--bg-main)", minHeight: "100vh" }}>
             {/* Header / Hero Section */}
             <section style={{
-                padding: "100px 0 60px",
+                padding: "clamp(60px, 10vw, 100px) 0 60px",
                 borderBottom: "1px solid var(--border)",
                 background: "linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, rgba(10, 10, 10, 0) 100%)"
             }}>
@@ -36,7 +36,7 @@ export default function AnalysesPage() {
                         </span>
 
                         <h1 style={{
-                            fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                            fontSize: "clamp(1.75rem, 7vw, 4rem)",
                             fontWeight: 600,
                             color: "var(--white)",
                             letterSpacing: "-0.03em",
@@ -61,10 +61,10 @@ export default function AnalysesPage() {
             <section className="section" style={{ padding: "80px 0" }}>
                 <div className="container">
                     {allArticles.length > 0 ? (
-                        <div style={{
+                        <div className="mobile-grid-1col" style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-                            gap: "32px"
+                            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                            gap: "24px"
                         }}>
                             {allArticles.map((article) => (
                                 <ArticleCard

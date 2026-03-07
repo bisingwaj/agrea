@@ -318,12 +318,12 @@ export default function MobileDiagnosticForm() {
 
     // ── SCREEN DEFINITIONS ──
     const SCREEN_TITLES = [
-        "Votre entreprise",
-        "Structure & taille",
-        "Situation actuelle",
-        "Vos objectifs",
-        "Vos documents",
-        "Contact",
+        t("mobile.diagnostic.screen_sectors") || "Votre entreprise",
+        t("mobile.diagnostic.screen_size") || "Structure & taille",
+        t("mobile.diagnostic.screen_situation") || "Situation actuelle",
+        t("mobile.diagnostic.screen_objectives") || "Vos objectifs",
+        t("mobile.diagnostic.screen_documents") || "Vos documents",
+        t("mobile.diagnostic.screen_contact") || "Contact",
     ];
 
     // ── LAYOUT ────────────────────────────────────────────────────────────────
@@ -348,7 +348,7 @@ export default function MobileDiagnosticForm() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "16px", marginBottom: "4px" }}>
                     <div>
                         <p style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-900)", fontWeight: 600, margin: 0 }}>
-                            Étape {screen + 1} / {TOTAL_SCREENS}
+                            {t("mobile.diagnostic.step") || "Étape"} {screen + 1} / {TOTAL_SCREENS}
                         </p>
                         <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--white)", letterSpacing: "-0.02em", margin: "4px 0 0" }}>
                             {SCREEN_TITLES[screen]}
@@ -372,20 +372,20 @@ export default function MobileDiagnosticForm() {
                 {screen === 0 && (
                     <>
                         <div>
-                            <label style={labelSt}>Votre secteur <span style={{ color: "var(--green-900)" }}>*</span></label>
+                            <label style={labelSt}>{t("evaluation.step1.sector_label") || "Votre secteur"} <span style={{ color: "var(--green-900)" }}>*</span></label>
                             <div style={{ position: "relative" }}>
                                 <select value={form.sector} onChange={(e) => update({ sector: e.target.value })} style={selectSt}>
-                                    <option value="">Choisissez un secteur…</option>
-                                    {sectors.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                    <option value="">{t("mobile.diagnostic.choose_sector") || "Choisissez un secteur…"}</option>
+                                    {sectors.map((s) => <option key={s.id} value={s.id}>{t(s.name)}</option>)}
                                 </select>
                                 <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
                             </div>
                         </div>
                         <div>
-                            <label style={labelSt}>Ville de domiciliation <span style={{ color: "var(--green-900)" }}>*</span></label>
+                            <label style={labelSt}>{t("evaluation.step1.city_label") || "Ville de domiciliation"} <span style={{ color: "var(--green-900)" }}>*</span></label>
                             <div style={{ position: "relative" }}>
                                 <select value={form.city} onChange={(e) => update({ city: e.target.value })} style={selectSt}>
-                                    <option value="">Choisissez une ville…</option>
+                                    <option value="">{t("mobile.diagnostic.choose_city") || "Choisissez une ville…"}</option>
                                     {CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
                                 </select>
                                 <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
@@ -393,7 +393,7 @@ export default function MobileDiagnosticForm() {
                         </div>
                         {(!form.sector || !form.city) && (
                             <p style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "4px" }}>
-                                Ces deux champs sont obligatoires pour personnaliser votre diagnostic.
+                                {t("mobile.diagnostic.mandatory_fields") || "Ces deux champs sont obligatoires pour personnaliser votre diagnostic."}
                             </p>
                         )}
                     </>
@@ -403,7 +403,7 @@ export default function MobileDiagnosticForm() {
                 {screen === 1 && (
                     <>
                         <div>
-                            <label style={labelSt}>Type de structure</label>
+                            <label style={labelSt}>{t("mobile.diagnostic.type_structure") || "Type de structure"}</label>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
                                 {COMPANY_TYPES.map((ct) => (
                                     <Chip key={ct.value} label={ct.label} active={form.companyType === ct.value} onClick={() => update({ companyType: ct.value as DiagnosticData["companyType"] })} />
@@ -411,7 +411,7 @@ export default function MobileDiagnosticForm() {
                             </div>
                         </div>
                         <div>
-                            <label style={labelSt}>Nombre d'employés</label>
+                            <label style={labelSt}>{t("mobile.diagnostic.employee_count") || "Nombre d'employés"}</label>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "6px" }}>
                                 {EMPLOYEE_COUNTS.map((ec) => (
                                     <Chip key={ec.value} label={ec.label} active={form.employeeCount === ec.value} onClick={() => update({ employeeCount: ec.value as DiagnosticData["employeeCount"] })} />
@@ -425,7 +425,7 @@ export default function MobileDiagnosticForm() {
                 {screen === 2 && (
                     <>
                         <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
-                            Cochez les documents que vous possédez déjà.
+                            {t("mobile.diagnostic.check_docs_owned") || "Cochez les documents que vous possédez déjà."}
                         </p>
                         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                             {BASE_DOCS.map((doc) => (
@@ -445,7 +445,7 @@ export default function MobileDiagnosticForm() {
                 {screen === 3 && (
                     <>
                         <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
-                            Sélectionnez vos objectifs de conformité.
+                            {t("mobile.diagnostic.select_objectives") || "Sélectionnez vos objectifs de conformité."}
                         </p>
                         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                             {objectives.map((obj) => {
@@ -474,7 +474,7 @@ export default function MobileDiagnosticForm() {
                 {screen === 4 && (
                     <>
                         <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
-                            Documents déjà obtenus pour votre secteur.
+                            {t("mobile.diagnostic.docs_already_obtained") || "Documents déjà obtenus pour votre secteur."}
                         </p>
                         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                             {documents.map((doc) => {
@@ -509,10 +509,10 @@ export default function MobileDiagnosticForm() {
                             borderRadius: "10px",
                         }}>
                             <p style={{ fontSize: "13px", color: "var(--green-900)", fontWeight: 600, margin: "0 0 4px" }}>
-                                Presque terminé !
+                                {t("mobile.diagnostic.almost_done") || "Presque terminé !"}
                             </p>
                             <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0, lineHeight: "1.5" }}>
-                                Recevez votre rapport personnalisé sur WhatsApp dans les 24h.
+                                {t("mobile.diagnostic.receive_report") || "Recevez votre rapport personnalisé sur WhatsApp dans les 24h."}
                             </p>
                         </div>
                         <div>
@@ -574,7 +574,7 @@ export default function MobileDiagnosticForm() {
                             flexShrink: 0,
                         }}
                     >
-                        <ArrowLeft size={16} /> Retour
+                        <ArrowLeft size={16} /> {t("mobile.diagnostic.back") || "Retour"}
                     </button>
                 )}
 
@@ -592,7 +592,7 @@ export default function MobileDiagnosticForm() {
                             fontFamily: "inherit", transition: "all 0.2s ease",
                         }}
                     >
-                        Continuer <ArrowRight size={18} />
+                        {t("mobile.diagnostic.continue") || "Continuer"} <ArrowRight size={18} />
                     </button>
                 ) : (
                     <button
@@ -609,7 +609,7 @@ export default function MobileDiagnosticForm() {
                         }}
                     >
                         <CheckCircle size={18} />
-                        {submitting ? "Génération…" : "Obtenir mon rapport"}
+                        {submitting ? (t("mobile.diagnostic.generating") || "Génération…") : (t("mobile.diagnostic.get_report") || "Obtenir mon rapport")}
                     </button>
                 )}
             </div>

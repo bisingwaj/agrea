@@ -19,7 +19,7 @@ export default function MobileBurgerMenu({ isOpen, onClose }: MobileBurgerMenuPr
     }, [isOpen]);
 
     const navLinks = [
-        { href: "/", label: "Accueil" },
+        { href: "/", label: t("mobile.menu.home") || "Accueil" },
         { href: "/guides", label: t("nav.guides") || "Guides Sectoriels" },
         { href: "/veille", label: t("nav.veille") || "Veille Réglementaire" },
         { href: "/analyses", label: t("nav.analyses") || "Analyses" },
@@ -168,7 +168,7 @@ export default function MobileBurgerMenu({ isOpen, onClose }: MobileBurgerMenuPr
                             color: "rgba(255,255,255,0.25)",
                             marginBottom: "8px",
                         }}>
-                            Secteurs populaires
+                            {t("mobile.menu.popular_sectors") || "Secteurs populaires"}
                         </p>
                         {quickSectors.map((s) => (
                             <Link
@@ -219,7 +219,7 @@ export default function MobileBurgerMenu({ isOpen, onClose }: MobileBurgerMenuPr
                             gap: "6px",
                         }}>
                             <Globe size={12} />
-                            Langue
+                            {t("mobile.menu.language") || "Langue"}
                         </p>
                         <div style={{ display: "flex", gap: "8px" }}>
                             {(["FR", "EN", "ZH"] as const).map((l) => (
@@ -272,7 +272,7 @@ export default function MobileBurgerMenu({ isOpen, onClose }: MobileBurgerMenuPr
                         }}
                     >
                         <ClipboardCheck size={17} />
-                        Démarrer mon diagnostic
+                        {t("mobile.menu.start_diagnostic") || "Démarrer mon diagnostic"}
                     </Link>
                 </div>
             </div>

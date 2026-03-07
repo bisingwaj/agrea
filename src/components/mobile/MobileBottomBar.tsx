@@ -10,11 +10,11 @@ export default function MobileBottomBar() {
     const pathname = usePathname();
 
     const navItems = [
-        { href: "/", icon: Home, label: "Accueil" },
-        { href: "/evaluation", icon: ClipboardCheck, label: "Diagnostic" },
-        { href: "/guides", icon: BookOpen, label: "Guides" },
-        { href: "/analyses", icon: Newspaper, label: "Analyses" },
-        { href: "/a-propos", icon: User, label: "À propos" },
+        { href: "/", icon: Home, label: t("mobile.nav.home") || "Accueil" },
+        { href: "/evaluation", icon: ClipboardCheck, label: t("mobile.nav.diagnostic") || "Diagnostic" },
+        { href: "/guides", icon: BookOpen, label: t("mobile.nav.guides") || "Guides" },
+        { href: "/analyses", icon: Newspaper, label: t("mobile.nav.analyses") || "Analyses" },
+        { href: "/a-propos", icon: User, label: t("mobile.nav.about") || "À propos" },
     ];
 
     return (

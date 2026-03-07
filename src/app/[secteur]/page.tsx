@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { getSectorById, sectors } from "@/data/sectors";
 import proceduresData from "@/data/procedures.json";
+import { tServer } from "@/lib/tServer";
 
 export function generateStaticParams() {
     return sectors.map((s) => ({ secteur: s.id }));
@@ -13,8 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const sector = getSectorById(secteur);
     if (!sector) return {};
     return {
-        title: `${sector.name} — Démarches administratives en RDC | Agréa`,
-        description: sector.description,
+        title: `${tServer(sector.name)} — Démarches administratives en RDC | Agréa`,
+        description: tServer(sector.description),
     };
 }
 
@@ -34,8 +35,8 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "ItemList",
-                        "name": `Procédures et obligations réglementaires : ${sector.name} en RDC`,
-                        "description": sector.description,
+                        "name": `Procédures et obligations réglementaires : ${tServer(sector.name)} en RDC`,
+                        "description": tServer(sector.description),
                         "itemListElement": procedures.slice(0, 10).map((proc: any, index: number) => ({
                             "@type": "ListItem",
                             "position": index + 1,
@@ -54,7 +55,7 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
                 <div style={{ padding: "16px clamp(20px, 5vw, 62px)", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", maxWidth: "100%", margin: "0 auto" }}>
                     <Link href="/" style={{ color: "var(--text-muted)", fontSize: "13px", textDecoration: "none" }}>Accueil</Link>
                     <ChevronRight size={14} color="var(--text-muted)" />
-                    <span style={{ color: "var(--white)", fontSize: "13px", fontWeight: 500 }}>{sector.name}</span>
+                    <span style={{ color: "var(--white)", fontSize: "13px", fontWeight: 500 }}>{tServer(sector.name)}</span>
                 </div>
             </div>
 
@@ -70,9 +71,9 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
 
                     <div style={{ maxWidth: "800px", marginBottom: "48px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
-                            <h1 style={{ fontSize: "clamp(1.75rem, 7vw, 3rem)", fontWeight: 600, letterSpacing: "-0.02em", color: "var(--white)", margin: 0 }}>{sector.name}</h1>
+                            <h1 style={{ fontSize: "clamp(1.75rem, 7vw, 3rem)", fontWeight: 600, letterSpacing: "-0.02em", color: "var(--white)", margin: 0 }}>{tServer(sector.name)}</h1>
                         </div>
-                        <p style={{ fontSize: "20px", color: "var(--text-secondary)", lineHeight: "1.6" }}>{sector.description}</p>
+                        <p style={{ fontSize: "20px", color: "var(--text-secondary)", lineHeight: "1.6" }}>{tServer(sector.description)}</p>
                     </div>
 
                     {/* Right column (now Top Block CTA) */}
@@ -87,7 +88,7 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
                                 </h3>
                             </div>
                             <p style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                                Évitez les sanctions et les retards. Obtenez immédiatement la liste certifiée des prérequis administratifs pour opérer légalement dans le secteur <strong>{sector.name}</strong>.
+                                Évitez les sanctions et les retards. Obtenez immédiatement la liste certifiée des prérequis administratifs pour opérer légalement dans le secteur <strong>{tServer(sector.name)}</strong>.
                             </p>
                         </div>
 

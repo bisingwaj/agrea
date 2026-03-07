@@ -5,6 +5,7 @@ import { getSectorById, sectors } from "@/data/sectors";
 import { getObjectiveById, objectives } from "@/data/objectives";
 import { getDocumentsByObjective } from "@/data/documents";
 import PdfDownloadButton from "@/components/result/PdfDownloadButton";
+import { tServer } from "@/lib/tServer";
 
 export function generateStaticParams() {
     const params: { secteur: string; objectif: string }[] = [];
@@ -21,8 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const obj = getObjectiveById(objectif);
     if (!obj) return {};
     return {
-        title: `${obj.label} — Liste des documents requis en RDC | Agréa`,
-        description: `Téléchargez la liste complète des documents requis pour votre ${obj.label} en République Démocratique du Congo. Délai : ${obj.daysMin} à ${obj.daysMax} jours.`,
+        title: `${tServer(obj.label)} — Liste des documents requis en RDC | Agréa`,
+        description: `Téléchargez la liste complète des documents requis pour votre ${tServer(obj.label)} en République Démocratique du Congo. Délai : ${obj.daysMin} à ${obj.daysMax} jours.`,
     };
 }
 
@@ -48,18 +49,18 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
                         "mainEntity": [
                             {
                                 "@type": "Question",
-                                "name": `Quels sont les documents obligatoires pour obtenir : ${obj.label} en RDC ?`,
+                                "name": `Quels sont les documents obligatoires pour obtenir : ${tServer(obj.label)} en RDC ?`,
                                 "acceptedAnswer": {
                                     "@type": "Answer",
-                                    "text": required.map((d, i) => `${i + 1}. ${d.name}`).join(" | ")
+                                    "text": required.map((d, i) => `${i + 1}. ${tServer(d.name)}`).join(" | ")
                                 }
                             },
                             optional.length > 0 ? {
                                 "@type": "Question",
-                                "name": `Quels sont les documents recommandés ou optionnels pour : ${obj.label} en RDC ?`,
+                                "name": `Quels sont les documents recommandés ou optionnels pour : ${tServer(obj.label)} en RDC ?`,
                                 "acceptedAnswer": {
                                     "@type": "Answer",
-                                    "text": optional.map((d, i) => `${i + 1}. ${d.name}`).join(" | ")
+                                    "text": optional.map((d, i) => `${i + 1}. ${tServer(d.name)}`).join(" | ")
                                 }
                             } : null
                         ].filter(Boolean)
@@ -71,9 +72,9 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
                 <div className="container" style={{ padding: "16px 24px", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
                     <Link href="/" style={{ color: "var(--text-muted)", fontSize: "13px" }}>Accueil</Link>
                     <ChevronRight size={14} color="var(--text-muted)" />
-                    <Link href={`/${secteur}`} style={{ color: "var(--text-muted)", fontSize: "13px" }}>{sector.name}</Link>
+                    <Link href={`/${secteur}`} style={{ color: "var(--text-muted)", fontSize: "13px" }}>{tServer(sector.name)}</Link>
                     <ChevronRight size={14} color="var(--text-muted)" />
-                    <span style={{ color: "var(--white)", fontSize: "13px", fontWeight: 500 }}>{obj.label}</span>
+                    <span style={{ color: "var(--white)", fontSize: "13px", fontWeight: 500 }}>{tServer(obj.label)}</span>
                 </div>
             </div>
 
@@ -91,10 +92,10 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
                         <div style={{ maxWidth: "640px" }}>
                             <p className="label" style={{ marginBottom: "12px", color: "var(--green-900)" }}>Guide de Conformité</p>
                             <h1 style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)", marginBottom: "16px", color: "var(--white)", lineHeight: 1.2 }}>
-                                Comment obtenir : {obj.label} en RDC ?
+                                Comment obtenir : {tServer(obj.label)} en RDC ?
                             </h1>
                             <p style={{ marginBottom: "32px", color: "var(--text-secondary)", fontSize: "18px", lineHeight: 1.6 }}>
-                                {obj.description} Découvrez la liste exacte, certifiée et à jour des documents requis pour valider cette démarche légale.
+                                {tServer(obj.description)} Découvrez la liste exacte, certifiée et à jour des documents requis pour valider cette démarche légale.
                             </p>
 
                             {/* Info cards */}
@@ -191,14 +192,14 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
                                                 </div>
                                                 <div style={{ flex: 1 }}>
                                                     <p style={{ fontWeight: 500, color: "var(--white)", fontSize: "14px", marginBottom: "4px" }}>
-                                                        {idx + 1}. {doc.name}
+                                                        {idx + 1}. {tServer(doc.name)}
                                                     </p>
                                                     <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: doc.tip || doc.source ? "8px" : 0 }}>
-                                                        {doc.description}
+                                                        {tServer(doc.description)}
                                                     </p>
                                                     {doc.source && (
                                                         <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-                                                            Source : <span style={{ fontWeight: 500 }}>{doc.source}</span>
+                                                            Source : <span style={{ fontWeight: 500 }}>{tServer(doc.source)}</span>
                                                         </p>
                                                     )}
                                                     {doc.tip && (
@@ -214,7 +215,7 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
                                                             }}
                                                         >
                                                             <Info size={14} color="var(--green-900)" style={{ flexShrink: 0, marginTop: "1px" }} />
-                                                            <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>{doc.tip}</p>
+                                                            <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>{tServer(doc.tip)}</p>
                                                         </div>
                                                     )}
                                                 </div>
@@ -262,13 +263,13 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
                                                     </div>
                                                     <div>
                                                         <p style={{ fontWeight: 500, color: "var(--text-secondary)", fontSize: "14px", marginBottom: "4px" }}>
-                                                            {doc.name}
+                                                            {tServer(doc.name)}
                                                         </p>
                                                         <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                                                            {doc.description}
+                                                            {tServer(doc.description)}
                                                         </p>
                                                         {doc.tip && (
-                                                            <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "6px" }}>{doc.tip}</p>
+                                                            <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "6px" }}>{tServer(doc.tip)}</p>
                                                         )}
                                                     </div>
                                                 </div>

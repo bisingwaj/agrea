@@ -69,7 +69,7 @@ export default function Step1Identification({ form, updateForm }: Props) {
                 >
                     <option value="">{t("evaluation.step1.sector_placeholder")}</option>
                     {sectors.map((s) => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
+                        <option key={s.id} value={s.id}>{t(s.name)}</option>
                     ))}
                 </select>
             </div>

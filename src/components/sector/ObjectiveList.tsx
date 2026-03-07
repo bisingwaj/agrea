@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Objective } from "@/data/objectives";
+import { useTranslation } from "@/lib/i18n";
 
 interface Props {
     objectives: Objective[];
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function ObjectiveList({ objectives, sectorId }: Props) {
+    const { t } = useTranslation();
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {objectives.map((obj) => (
@@ -31,7 +33,7 @@ export default function ObjectiveList({ objectives, sectorId }: Props) {
                 >
                     <div>
                         <p style={{ fontWeight: 500, color: "var(--white)", fontSize: "15px", marginBottom: "4px" }}>
-                            {obj.label}
+                            {t(obj.label)}
                         </p>
                         <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
                             {obj.daysMin} à {obj.daysMax} jours ·{" "}

@@ -5,6 +5,7 @@ import { Download } from "lucide-react";
 import { Objective } from "@/data/objectives";
 import { Sector } from "@/data/sectors";
 import { RequiredDocument } from "@/data/documents";
+import { useTranslation } from "@/lib/i18n";
 
 interface Props {
     objective: Objective;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function PdfDownloadButton({ objective, sector, documents }: Props) {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
 
     const handleDownload = async () => {
@@ -39,11 +41,11 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(11);
             doc.setFont("helvetica", "bold");
-            doc.text("AGRÉA AFRICA", margin, 9.5);
+            doc.text(t("pdf.header") || "AGRÉA AFRICA", margin, 9.5);
 
             doc.setFont("helvetica", "normal");
             doc.setFontSize(8);
-            doc.text("agrea.africa", pageWidth - margin, 9.5, { align: "right" });
+            doc.text(t("pdf.website") || "agrea.africa", pageWidth - margin, 9.5, { align: "right" });
 
             y = 30;
 
@@ -58,9 +60,9 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             doc.setTextColor(...GRAY);
             doc.setFontSize(9);
             doc.setFont("helvetica", "normal");
-            doc.text(`Secteur : ${sector.name}`, margin, y);
+            doc.text(`${t("pdf.sector") || "Secteur :"} ${sector.name}`, margin, y);
             y += 6;
-            doc.text(`Document généré le ${new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}`, margin, y);
+            doc.text(`${t("pdf.generated_on") || "Document généré le"} ${new Date().toLocaleDateString(t("pdf.locale") || "fr-FR", { day: "numeric", month: "long", year: "numeric" })}`, margin, y);
             y += 5;
 
             // Info boxes
@@ -68,11 +70,11 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             doc.roundedRect(margin, y, contentWidth / 2 - 4, 14, 2, 2, "F");
             doc.setTextColor(...GRAY);
             doc.setFontSize(7);
-            doc.text("DÉLAI ESTIMÉ", margin + 4, y + 5);
+            doc.text(t("pdf.est_delay") || "DÉLAI ESTIMÉ", margin + 4, y + 5);
             doc.setTextColor(...BLACK);
             doc.setFontSize(10);
             doc.setFont("helvetica", "bold");
-            doc.text(`${objective.daysMin} – ${objective.daysMax} jours`, margin + 4, y + 11);
+            doc.text(`${objective.daysMin} – ${objective.daysMax} ${t("pdf.days") || "jours"}`, margin + 4, y + 11);
 
             const box2x = margin + contentWidth / 2 + 4;
             doc.setFillColor(...LIGHT);
@@ -80,12 +82,12 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             doc.setTextColor(...GRAY);
             doc.setFontSize(7);
             doc.setFont("helvetica", "normal");
-            doc.text("COÛT OFFICIEL", box2x + 4, y + 5);
+            doc.text(t("pdf.official_cost") || "COÛT OFFICIEL", box2x + 4, y + 5);
             doc.setTextColor(...BLACK);
             doc.setFontSize(10);
             doc.setFont("helvetica", "bold");
             const costText = objective.costMin === 0
-                ? "Frais officiels"
+                ? (t("pdf.official_fees") || "Frais officiels")
                 : `${objective.costMin.toLocaleString()} – ${objective.costMax.toLocaleString()} USD`;
             doc.text(costText, box2x + 4, y + 11);
 
@@ -104,7 +106,7 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             doc.setFont("helvetica", "bold");
             doc.setFontSize(11);
             doc.setTextColor(...BLACK);
-            doc.text(`Documents obligatoires (${required.length})`, margin, y);
+            doc.text(`${t("pdf.mandatory_docs") || "Documents obligatoires"} (${required.length})`, margin, y);
             y += 8;
 
             required.forEach((d, idx) => {
@@ -134,14 +136,14 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
                 if (d.source) {
                     doc.setFontSize(7.5);
                     doc.setTextColor(13, 92, 58);
-                    doc.text(`Source : ${d.source}`, margin + 8, y);
+                    doc.text(`${t("pdf.source") || "Source :"} ${d.source}`, margin + 8, y);
                     y += 4;
                 }
 
                 if (d.tip) {
                     doc.setFontSize(7.5);
                     doc.setTextColor(13, 92, 58);
-                    const tipLines = doc.splitTextToSize(`Conseil : ${d.tip}`, contentWidth - 12);
+                    const tipLines = doc.splitTextToSize(`${t("pdf.tip") || "Conseil :"} ${d.tip}`, contentWidth - 12);
                     doc.text(tipLines, margin + 8, y);
                     y += tipLines.length * 4;
                 }
@@ -154,7 +156,7 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(11);
                 doc.setTextColor(...BLACK);
-                doc.text(`Documents complémentaires (${optional.length})`, margin, y);
+                doc.text(`${t("pdf.additional_docs") || "Documents complémentaires"} (${optional.length})`, margin, y);
                 y += 8;
 
                 optional.forEach((d, idx) => {
@@ -186,8 +188,8 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(6.5);
                 doc.setFont("helvetica", "normal");
-                doc.text("Agréa Africa — agrea.africa — Cette liste est fournie à titre indicatif. Les exigences officielles peuvent évoluer.", margin, 295);
-                doc.text(`Page ${i} / ${pageCount}`, pageWidth - margin, 295, { align: "right" });
+                doc.text(`${t("pdf.header") || "AGRÉA AFRICA"} — ${t("pdf.website") || "agrea.africa"} — ${t("pdf.footer_note") || "Cette liste est fournie à titre indicatif. Les exigences officielles peuvent évoluer."}`, margin, 295);
+                doc.text(`${t("pdf.page") || "Page"} ${i} / ${pageCount}`, pageWidth - margin, 295, { align: "right" });
             }
 
             const filename = `Agrea_${objective.id}_${new Date().toISOString().slice(0, 10)}.pdf`;
@@ -207,7 +209,7 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             style={{ opacity: loading ? 0.7 : 1, cursor: loading ? "wait" : "pointer" }}
         >
             <Download size={16} />
-            {loading ? "Génération en cours..." : "Télécharger la liste PDF"}
+            {loading ? (t("pdf.generating") || "Génération en cours...") : (t("pdf.download") || "Télécharger la liste PDF")}
         </button>
     );
 }

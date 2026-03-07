@@ -7,7 +7,7 @@ import { en } from "../locales/en";
 import { zh } from "../locales/zh";
 
 export type LocaleKey = "FR" | "EN" | "ZH";
-type LocaleData = typeof fr;
+type LocaleData = any;
 
 const dictionaries: Record<LocaleKey, LocaleData> = {
     FR: fr,

@@ -308,6 +308,493 @@ export const fr = {
         cta_title: "Agréa prend en charge votre mise en conformité",
         cta_desc: "Un expert vous rappelle dans les 4 heures avec une feuille de route sur mesure.",
         cta_btn: "Être rappelé gratuitement"
+    },
+    mobile: {
+        nav: {
+            home: "Accueil",
+            diagnostic: "Diagnostic",
+            guides: "Guides",
+            analyses: "Analyses",
+            about: "À propos"
+        },
+        menu: {
+            home: "Accueil",
+            popular_sectors: "Secteurs populaires",
+            language: "Langue",
+            start_diagnostic: "Démarrer mon diagnostic"
+        },
+        diagnostic: {
+            screen_sectors: "Votre entreprise",
+            screen_size: "Structure & taille",
+            screen_situation: "Situation actuelle",
+            screen_objectives: "Vos objectifs",
+            screen_documents: "Vos documents",
+            screen_contact: "Contact",
+            step: "Étape",
+            choose_sector: "Choisissez un secteur…",
+            choose_city: "Choisissez une ville…",
+            type_structure: "Type de structure",
+            employee_count: "Nombre d'employés",
+            check_docs_owned: "Cochez les documents que vous possédez déjà.",
+            select_objectives: "Sélectionnez vos objectifs de conformité.",
+            docs_already_obtained: "Documents déjà obtenus pour votre secteur.",
+            almost_done: "Presque terminé !",
+            receive_report: "Recevez votre rapport personnalisé sur WhatsApp dans les 24h.",
+            back: "Retour",
+            continue: "Continuer",
+            generating: "Génération…",
+            get_report: "Obtenir mon rapport",
+            mandatory_fields: "Ces deux champs sont obligatoires pour personnaliser votre diagnostic."
+        }
+    },
+    pdf: {
+        header: "AGRÉA AFRICA",
+        website: "agrea.africa",
+        sector: "Secteur :",
+        generated_on: "Document généré le",
+        est_delay: "DÉLAI ESTIMÉ",
+        days: "jours",
+        official_cost: "COÛT OFFICIEL",
+        official_fees: "Frais officiels",
+        mandatory_docs: "Documents obligatoires",
+        additional_docs: "Documents complémentaires",
+        source: "Source :",
+        tip: "Conseil :",
+        footer_note: "Cette liste est fournie à titre indicatif. Les exigences officielles peuvent évoluer.",
+        page: "Page",
+        download: "Télécharger la liste PDF",
+        generating: "Génération en cours..."
     }
-
+,
+    data_sectors: {
+        "creation-entreprise": {
+                "name": "Création d'Entreprise",
+                "description": "Immatriculation au RCCM, identification nationale et enregistrements fiscaux initiaux.",
+                "objectives_list": [
+                        "Lancer mon premier projet entrepreneurial",
+                        "Sécuriser ma forme juridique actuelle",
+                        "Mettre l'entreprise en conformité avant une levée de fonds",
+                        "Éviter les pénalités liées aux retards d'immatriculation",
+                        "Transformer mon établissement en société (SARL/SA)"
+                ]
+        },
+        "btp": {
+                "name": "BTP & Construction",
+                "description": "Permis de construire, agréments techniques, études d'impact et conformités environnementales.",
+                "objectives_list": [
+                        "Démarrer un nouveau chantier immobilier",
+                        "Répondre à un appel d'offres public / privé",
+                        "Sécuriser le permis de construire",
+                        "S'assurer de la conformité environnementale (EIES)",
+                        "Obtenir l'agrément de Catégorie supérieure"
+                ]
+        },
+        "marches-publics": {
+                "name": "Marchés Publics",
+                "description": "Attestations fiscales, certificats ARMP, DGI, CNSS et qualification de soumissionnaire.",
+                "objectives_list": [
+                        "Renouveler mes attestations fiscales et sociales",
+                        "Obtenir le certificat de régularité ARMP",
+                        "Soumissionner de manière imminente (Urgence)",
+                        "Préparer mon dossier de qualification",
+                        "Se mettre en règle avec l'ARSP (Sous-traitance)"
+                ]
+        },
+        "import-export": {
+                "name": "Import & Export",
+                "description": "Licences d'importation, certificats d'origine, numéros import-export et dédouanement.",
+                "objectives_list": [
+                        "Dédouaner une marchandise bloquée",
+                        "Obtenir mon numéro d'import/export permanent",
+                        "Préparer l'exportation de produits locaux",
+                        "Demander une exonération douanière",
+                        "Mettre en place la licence/autorisation adéquate"
+                ]
+        },
+        "sante": {
+                "name": "Santé & Pharmacie",
+                "description": "Ouverture de cliniques, licences d'officine, enregistrement de médicaments et autorisations d'exercice.",
+                "objectives_list": [
+                        "Ouvrir une nouvelle pharmacie ou clinique",
+                        "Lancer un nouveau produit/équipement médical",
+                        "Obtenir mon autorisation d'exercice",
+                        "Réussir l'inspection du Ministère de la Santé",
+                        "Renouveler mes licences sanitaires actuelles"
+                ]
+        },
+        "transport": {
+                "name": "Transport & Logistique",
+                "description": "Licences de transport routier, fluvial, immatriculation de flottes et permis de conduire professionnels.",
+                "objectives_list": [
+                        "Immatriculer ma flotte de camions/véhicules",
+                        "Lancer une nouvelle ligne de transport interurbain",
+                        "Obtenir mon autorisation de transport fluvial/aérien",
+                        "Renouveler les permis/autorisations des chauffeurs",
+                        "Régulariser mes contrats d'assurance flotte"
+                ]
+        },
+        "mines": {
+                "name": "Mines & Carrières",
+                "description": "Permis de recherches, cartes d'exploitant artisanal, conformité environnementale et sociale minérale.",
+                "objectives_list": [
+                        "Lancer l'exploration d'un nouveau carré minier",
+                        "Convertir mon permis de recherches en exploitation",
+                        "Préparer l'audit environnemental et social",
+                        "Exporter des produits miniers marchands",
+                        "Renouveler mes autorisations auprès du CAMI"
+                ]
+        },
+        "telecoms": {
+                "name": "Télécoms & Médias",
+                "description": "Agréments ARPTC, fréquences radio, licences de fournisseur d'accès et autorisation d'exploitation.",
+                "objectives_list": [
+                        "Obtenir une licence fournisseur d'accès Internet",
+                        "Demander ou renouveler une fréquence de radiodiffusion",
+                        "Déployer de nouvelles infrastructures (antennes, fibre)",
+                        "Assurer ma conformité ARPTC pour mon matériel",
+                        "Lancer un média audiovisuel ou une chaîne TNT"
+                ]
+        },
+        "education": {
+                "name": "Éducation & Formation",
+                "description": "Agréments EPSP, ouverture d'écoles privées, universités et centres de formation professionnelle.",
+                "objectives_list": [
+                        "Ouvrir une nouvelle école primaire / secondaire",
+                        "Lancer un centre de formation professionnelle reconnu",
+                        "Obtenir l'agrément universitaire (Ministère ESU)",
+                        "Régulariser les dossiers de mon personnel enseignant",
+                        "Homologuer de nouveaux modules de cours académiques"
+                ]
+        },
+        "agriculture": {
+                "name": "Agriculture & Élevage",
+                "description": "Concessions agricoles, certificats phytosanitaires et homologations d'intrants.",
+                "objectives_list": [
+                        "Sécuriser ma concession foncière agricole",
+                        "Importer des semences, engrais ou intrants spécialisés",
+                        "Exporter ma production agricole (café, cacao, etc.)",
+                        "Demander mon certificat phytosanitaire national",
+                        "Solliciter un financement ou une subvention ciblée"
+                ]
+        },
+        "securite": {
+                "name": "Sécurité Privée",
+                "description": "Agréments gardiennage, licences port d'armes, agrément matériel de communication et télésurveillance.",
+                "objectives_list": [
+                        "Créer une nouvelle agence de gardiennage",
+                        "Demander l'autorisation d'importation de matériel sécuritaire",
+                        "Obtenir l'autorisation de port d'armes réglementaire",
+                        "Renouveler l'agrément du Ministère de l'Intérieur",
+                        "Remporter un marché public de sécurisation d'infrastructures"
+                ]
+        },
+        "finance": {
+                "name": "Finances & Assurances",
+                "description": "Agréments BCC, agréments ARCA, transfert d'argent, microfinance et courtage en assurance.",
+                "objectives_list": [
+                        "Demander l'agrément officiel de la Banque Centrale (BCC)",
+                        "Lancer une structure de microfinance ou Mobile Money",
+                        "Obtenir l'agrément régulateur courtier / assureur (ARCA)",
+                        "Valider la conformité de mes procédures Anti-Blanchiment",
+                        "Lever des fonds agréés auprès d'investisseurs institutionnels"
+                ]
+        }
+},
+    data_objectives: {
+        "permis-construire": {
+                "name": "Permis de construire",
+                "label": "Permis de construire",
+                "description": "Autorisation administrative obligatoire avant tout début de travaux de construction."
+        },
+        "agrement-btp": {
+                "name": "Agrément BTP",
+                "label": "Agrément d'entrepreneur BTP",
+                "description": "Certification obligatoire pour répondre aux marchés publics de construction."
+        },
+        "eie": {
+                "name": "Étude d'Impact Environnemental",
+                "label": "Étude d'Impact Environnemental (EIE)",
+                "description": "Obligatoire pour tout projet dépassant 50 000 USD d'investissement."
+        },
+        "certificat-conformite-btp": {
+                "name": "Certificat de conformité technique",
+                "label": "Certificat de conformité technique",
+                "description": "Exigé pour les matériaux importés utilisés dans la construction."
+        },
+        "dossier-soumission": {
+                "name": "Dossier de soumission",
+                "label": "Constitution d'un dossier de soumission",
+                "description": "Ensemble des 15 à 25 pièces requises pour répondre à un appel d'offres public."
+        },
+        "attestation-fiscale": {
+                "name": "Attestation fiscale DGI",
+                "label": "Attestation de situation fiscale (DGI)",
+                "description": "Attestation prouvant que l'entreprise est en règle avec la Direction Générale des Impôts."
+        },
+        "attestation-cnss": {
+                "name": "Attestation CNSS",
+                "label": "Attestation de bonne standing CNSS",
+                "description": "Attestation de paiement des cotisations sociales à la Caisse Nationale de Sécurité Sociale."
+        },
+        "immatriculation-rccm": {
+                "name": "Immatriculation RCCM",
+                "label": "Immatriculation au Registre de Commerce (RCCM)",
+                "description": "Enregistrement obligatoire de l'entreprise au registre du commerce."
+        },
+        "numero-nif": {
+                "name": "Numéro d'Identification Fiscale",
+                "label": "Numéro d'Identification Fiscale (NIF)",
+                "description": "Identifiant fiscal unique attribué par la Direction Générale des Impôts."
+        },
+        "numero-inss": {
+                "name": "Affiliation INSS",
+                "label": "Affiliation à l'INSS (employeur)",
+                "description": "Enregistrement de l'entreprise en tant qu'employeur auprès de la sécurité sociale."
+        },
+        "licence-importation": {
+                "name": "Licence d'importation",
+                "label": "Licence d'importation",
+                "description": "Autorisation délivrée par le Ministère du Commerce pour importer des marchandises."
+        },
+        "certificat-conformite-import": {
+                "name": "Certificat de conformité",
+                "label": "Certificat de conformité à l'importation",
+                "description": "Certification que les produits importés respectent les standards techniques congolais."
+        },
+        "regime-douanier": {
+                "name": "Régime douanier",
+                "label": "Régime douanier et dédouanement",
+                "description": "Procédure de dédouanement auprès de la Direction Générale des Douanes et Accises (DGDA)."
+        },
+        "pharmacie-autorisation": {
+                "name": "Pharmacie — Autorisation d'ouverture",
+                "label": "Autorisation d'ouverture de pharmacie",
+                "description": "Autorisation délivrée par le Ministère de la Santé pour l'exploitation d'une pharmacie."
+        },
+        "clinique-agrement": {
+                "name": "Clinique — Agrément",
+                "label": "Agrément d'établissement de soins",
+                "description": "Dossier de plus de 30 pièces pour l'agrément d'une clinique privée."
+        },
+        "ecole-homologation": {
+                "name": "École — Homologation",
+                "label": "Homologation d'établissement scolaire privé",
+                "description": "Conformité aux standards 2024 du Ministère de l'EPST pour les établissements scolaires."
+        },
+        "permis-recherche-miniere": {
+                "name": "Permis de recherche minière",
+                "label": "Permis de recherche minière (CAMI)",
+                "description": "Autorisation d'exploration délivrée par le Cadastre Minier."
+        },
+        "droits-exploitation": {
+                "name": "Droits d'exploitation",
+                "label": "Droits d'exploitation minière",
+                "description": "Négociation et obtention des droits d'exploitation auprès du Ministère des Mines."
+        },
+        "conformite-code-minier": {
+                "name": "Conformité Code Minier 2018",
+                "label": "Audit de conformité au Code Minier révisé 2018",
+                "description": "Mise en conformité avec les nouvelles dispositions du Code Minier congolais révisé en 2018."
+        }
+},
+    data_documents: {
+        "pc-01": {
+                "name": "Formulaire de demande de permis de construire",
+                "description": "Formulaire officiel disponible auprès de la commune ou de l'Hôtel de Ville.",
+                "source": "Hôtel de Ville / Commune",
+                "tip": "Remplir en 3 exemplaires, signature et cachet du propriétaire."
+        },
+        "pc-02": {
+                "name": "Plan de situation du terrain (cadastre)",
+                "description": "Plan localisant précisément la parcelle dans le tissu urbain.",
+                "source": "Service du Cadastre - Division Urbaine"
+        },
+        "pc-03": {
+                "name": "Titre de propriété ou contrat de bail",
+                "description": "Preuve juridique du droit d'occuper la parcelle.",
+                "tip": "Si bail : durée minimum 25 ans pour obtenir le permis."
+        },
+        "pc-04": {
+                "name": "Plans architecturaux visés par un architecte agréé",
+                "description": "Plans de masse, de façades et de coupe établis et signés par un architecte membre de l'Ordre.",
+                "source": "Ordre des Architectes du Congo"
+        },
+        "pc-05": {
+                "name": "Note de calcul de structure",
+                "description": "Calculs justifiant la résistance de la structure, établis par un ingénieur civil."
+        },
+        "pc-06": {
+                "name": "Copie de la carte d'identité du demandeur",
+                "description": "Carte nationale d'identité ou passeport du maître d'ouvrage."
+        },
+        "pc-07": {
+                "name": "Preuve de paiement des taxes communales",
+                "description": "Reçu de paiement des droits d'enregistrement de la demande."
+        },
+        "pc-08": {
+                "name": "Enquête de commodo et incommodo (si nécessaire)",
+                "description": "Consultation du voisinage requise pour les constructions de grande envergure.",
+                "tip": "Exigée uniquement pour les bâtiments de plus de R+4."
+        },
+        "abtp-01": {
+                "name": "Formulaire de demande d'agrément BTP",
+                "description": "Formulaire officiel du Ministère des Infrastructures et Travaux Publics.",
+                "source": "Ministère des ITP"
+        },
+        "abtp-02": {
+                "name": "Statuts de la société certifiés conformes",
+                "description": "Actes constitutifs de la société certifiés par le notaire."
+        },
+        "abtp-03": {
+                "name": "Extrait du Registre de Commerce (RCCM)",
+                "description": "Extrait récent (moins de 3 mois) prouvant l'existence légale de l'entreprise."
+        },
+        "abtp-04": {
+                "name": "Attestation fiscale DGI en cours de validité",
+                "description": "Attestation de situation fiscale délivrée par la Direction Générale des Impôts.",
+                "source": "DGI"
+        },
+        "abtp-05": {
+                "name": "Attestation CNSS à jour",
+                "description": "Attestation de paiement des cotisations sociales.",
+                "source": "CNSS"
+        },
+        "abtp-06": {
+                "name": "Liste du personnel technique qualifié",
+                "description": "CV et diplômes des ingénieurs et techniciens employés par l'entreprise.",
+                "tip": "Minimum 1 ingénieur civil pour la catégorie la plus basse."
+        },
+        "abtp-07": {
+                "name": "Preuves de réalisation de travaux antérieurs",
+                "description": "Attestations de bonne exécution d'au moins 3 chantiers antérieurs."
+        },
+        "abtp-08": {
+                "name": "Bilan certifié du dernier exercice",
+                "description": "Bilan comptable certifié par un expert-comptable agréé."
+        },
+        "eie-01": {
+                "name": "Formulaire de demande d'évaluation environnementale",
+                "description": "Formulaire officiel du Ministère de l'Environnement et Développement Durable.",
+                "source": "Ministère MEDD"
+        },
+        "eie-02": {
+                "name": "Description détaillée du projet",
+                "description": "Mémoire descriptif complet du projet : nature, localisation, superficie, durée."
+        },
+        "eie-03": {
+                "name": "Plan de gestion environnementale et sociale",
+                "description": "Document décrivant les mesures d'atténuation des impacts identifiés."
+        },
+        "eie-04": {
+                "name": "Rapport d'étude d'impact environnemental",
+                "description": "Rapport élaboré par un expert en environnement certifié.",
+                "tip": "Doit être réalisé par un expert figurant sur la liste agréée du MEDD."
+        },
+        "eie-05": {
+                "name": "Résultat des consultations publiques",
+                "description": "Procès-verbaux des réunions de consultation des populations riveraines."
+        },
+        "mp-01": {
+                "name": "Formulaire de soumission rempli et signé",
+                "description": "Formulaire fourni dans le Dossier d'Appel d'Offres (DAO)."
+        },
+        "mp-02": {
+                "name": "Extrait RCCM récent (moins de 3 mois)",
+                "description": "Preuve de l'existence légale et de l'objet social de l'entreprise.",
+                "source": "Tribunal de Commerce"
+        },
+        "mp-03": {
+                "name": "Attestation de situation fiscale DGI",
+                "description": "Preuve de régularité fiscale, validité 3 mois.",
+                "source": "Direction Générale des Impôts"
+        },
+        "mp-04": {
+                "name": "Attestation CNSS à jour",
+                "description": "Preuve de régularité sociale, validité 3 mois.",
+                "source": "CNSS"
+        },
+        "mp-05": {
+                "name": "Attestation INSS employeur",
+                "description": "Preuve d'affiliation de l'entreprise à l'INSS.",
+                "source": "INSS"
+        },
+        "mp-06": {
+                "name": "Caution de soumission (garantie bancaire)",
+                "description": "Garantie bancaire représentant 2 à 3% du montant estimé du marché.",
+                "tip": "Délai d'émission : 3 à 7 jours ouvrés selon la banque."
+        },
+        "mp-07": {
+                "name": "Offre technique détaillée",
+                "description": "Méthodologie d'exécution, planning, moyens humains et matériels."
+        },
+        "mp-08": {
+                "name": "Offre financière (sous pli séparé)",
+                "description": "Devis détaillé et bordereau de prix unitaires.",
+                "tip": "Déposer dans une enveloppe séparée et scellée."
+        },
+        "mp-09": {
+                "name": "Attestation de bonne exécution de marchés antérieurs",
+                "description": "Au moins 3 attestations pour des marchés similaires."
+        },
+        "mp-10": {
+                "name": "Bilans des 3 derniers exercices certifiés",
+                "description": "Situations financières certifiées par un expert-comptable agréé."
+        },
+        "rccm-01": {
+                "name": "Statuts de la société notariés",
+                "description": "Acte constitutif rédigé et certifié par un notaire agréé."
+        },
+        "rccm-02": {
+                "name": "Formulaire de déclaration d'immatriculation",
+                "description": "Formulaire disponible au Greffe du Tribunal de Commerce.",
+                "source": "Tribunal de Commerce"
+        },
+        "rccm-03": {
+                "name": "Copies des pièces d'identité des associés",
+                "description": "Carte d'identité ou passeport de chaque associé et dirigeant."
+        },
+        "rccm-04": {
+                "name": "Justificatif du siège social",
+                "description": "Contrat de bail ou titre de propriété du local commercial."
+        },
+        "rccm-05": {
+                "name": "Preuve de libération du capital social",
+                "description": "Attestation bancaire ou certificat du notaire attestant le dépôt des apports."
+        },
+        "ph-01": {
+                "name": "Diplôme de pharmacien certifié",
+                "description": "Diplôme reconnu par le Conseil de l'Ordre des Pharmaciens du Congo.",
+                "source": "Ordre des Pharmaciens / MINSANTE"
+        },
+        "ph-02": {
+                "name": "Attestation de nationalité ou titre de séjour",
+                "description": "Pour les pharmaciens étrangers : autorisation d'exercice délivrée par le Ministère de la Santé."
+        },
+        "ph-03": {
+                "name": "Plan des locaux visé par l'ingénieur sanitaire",
+                "description": "Plans architecturaux de l'officine respectant les normes spatiales du MINSANTE."
+        },
+        "ph-04": {
+                "name": "Liste du matériel pharmaceutique disponible",
+                "description": "Inventaire complet des équipements et mobiliers de l'officine."
+        },
+        "ph-05": {
+                "name": "Contrat de bail du local (5 ans minimum)",
+                "description": "Bail commercial d'une durée minimale de 5 ans.",
+                "tip": "La durée du bail est vérifiée lors de l'inspection."
+        },
+        "ph-06": {
+                "name": "RCCM de la pharmacie",
+                "description": "Immatriculation commerciale de l'officine pharmaceutique."
+        },
+        "ph-07": {
+                "name": "NIF de la pharmacie",
+                "description": "Numéro d'Identification Fiscale de l'établissement."
+        },
+        "ph-08": {
+                "name": "Rapport d'inspection préalable",
+                "description": "Rapport établi par l'inspecteur pharmaceutique provincial suite à la visite des locaux.",
+                "tip": "Prévoir 2 à 3 mois entre la demande d'inspection et la visite effective."
+        }
+}
 };

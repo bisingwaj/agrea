@@ -1,14 +1,19 @@
 import { Metadata } from "next";
 import { getSortedArticlesData } from "@/lib/articles";
 import ArticleCard from "@/components/blog/ArticleCard";
+import { getTranslationContext } from "@/lib/tServer";
 
-export const metadata: Metadata = {
-    title: "Analyses & Publications | Agréa",
-    description: "Insights, décryptages réglementaires et conseils pratiques pour la gestion et la conformité de votre entreprise en RDC.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const tServer = await getTranslationContext();
+    return {
+        title: tServer("blog.meta_title") || "Analyses & Publications | Agréa",
+        description: tServer("blog.meta_desc") || "Insights, décryptages réglementaires et conseils pratiques pour la gestion et la conformité de votre entreprise en RDC.",
+    };
+}
 
-export default function AnalysesPage() {
+export default async function AnalysesPage() {
     const allArticles = getSortedArticlesData();
+    const tServer = await getTranslationContext();
 
     return (
         <main style={{ background: "var(--bg-main)", minHeight: "100vh" }}>
@@ -32,7 +37,7 @@ export default function AnalysesPage() {
                             textTransform: "uppercase",
                             marginBottom: "24px"
                         }}>
-                            Agréablog
+                            {tServer("blog.badge") || "Agréablog"}
                         </span>
 
                         <h1 style={{
@@ -43,7 +48,7 @@ export default function AnalysesPage() {
                             lineHeight: 1.1,
                             marginBottom: "24px"
                         }}>
-                            Analyses & Publications
+                            {tServer("blog.title") || "Analyses & Publications"}
                         </h1>
 
                         <p style={{
@@ -51,7 +56,7 @@ export default function AnalysesPage() {
                             color: "var(--text-secondary)",
                             lineHeight: 1.6
                         }}>
-                            Décrypter la complexité réglementaire congolaise pour transformer vos obligations en avantages stratégiques.
+                            {tServer("blog.desc") || "Décrypter la complexité réglementaire congolaise pour transformer vos obligations en avantages stratégiques."}
                         </p>
                     </div>
                 </div>
@@ -83,10 +88,10 @@ export default function AnalysesPage() {
                             border: "1px solid var(--border)"
                         }}>
                             <h3 style={{ fontSize: "1.5rem", color: "var(--white)", marginBottom: "12px", letterSpacing: "-0.02em" }}>
-                                De nouvelles publications arrivent très bientôt.
+                                {tServer("blog.empty_title") || "De nouvelles publications arrivent très bientôt."}
                             </h3>
                             <p style={{ color: "var(--text-muted)", fontSize: "15px" }}>
-                                Nos experts finalisent actuellement des analyses pointues sur la fiscalité et le droit social.
+                                {tServer("blog.empty_desc") || "Nos experts finalisent actuellement des analyses pointues sur la fiscalité et le droit social."}
                             </p>
                         </div>
                     )}
@@ -95,3 +100,4 @@ export default function AnalysesPage() {
         </main>
     );
 }
+

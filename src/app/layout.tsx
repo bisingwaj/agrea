@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import MobileNavbarWrapper from "@/components/mobile/MobileNavbarWrapper";
 import { LanguageProvider } from "@/lib/i18n";
+import { getTranslationContext } from "@/lib/tServer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,64 +17,70 @@ const inter = Inter({
 
 const BASE_URL = "https://agrea.africa";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
-  title: {
-    template: "%s | Agréa Africa",
-    default: "Agréa Africa — Conformité Administrative en RDC",
-  },
-  description:
-    "Agréa accompagne les entreprises de la RDC dans leurs démarches administratives, réglementaires et de conformité. Diagnostic en ligne, guides sectoriels, obtention d'agréments, permis et autorisations à Kinshasa.",
-  keywords: [
-    "agrément RDC",
-    "conformité Congo",
-    "administratif Kinshasa",
-    "marchés publics RDC",
-    "BTP Congo",
-    "créer SARL Kinshasa",
-    "permis minier RDC",
-    "RCCM Congo",
-    "licence import export RDC",
-    "facilitation administrative RDC",
-    "agréa africa",
-  ].join(", "),
-  authors: [{ name: "Agréa Africa", url: BASE_URL }],
-  creator: "Agréa Africa",
-  publisher: "Agréa Africa",
-  robots: { index: true, follow: true },
-  alternates: { canonical: BASE_URL },
-  openGraph: {
-    title: "Agréa Africa — Facilitation administrative et réglementaire en RDC",
-    description:
-      "Plateforme de facilitation administrative en RDC. Diagnostic de conformité, guides sectoriels, constitution de dossiers, suivi jusqu'à l'obtention.",
-    url: BASE_URL,
-    siteName: "Agréa Africa",
-    locale: "fr_CD",
-    type: "website",
-    images: [
-      {
-        url: `${BASE_URL}/og-default.png`,
-        width: 1200,
-        height: 630,
-        alt: "Agréa Africa — Conformité Administrative en RDC",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Agréa Africa — Conformité Administrative en RDC",
-    description:
-      "Diagnostic de conformité, guides sectoriels et accompagnement administratif pour les entreprises en RDC.",
-    images: [`${BASE_URL}/og-default.png`],
-    site: "@agreaafrica",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tServer = await getTranslationContext();
+  
+  return {
+    metadataBase: new URL(BASE_URL),
+    title: {
+      template: tServer("meta.title_template") || "%s | Agréa Africa",
+      default: tServer("meta.title_default") || "Agréa Africa — Conformité Administrative en RDC",
+    },
+    description: tServer("meta.description") || 
+      "Agréa accompagne les entreprises de la RDC dans leurs démarches administratives, réglementaires et de conformité. Diagnostic en ligne, guides sectoriels, obtention d'agréments, permis et autorisations à Kinshasa.",
+    keywords: tServer("meta.keywords") || [
+      "agrément RDC",
+      "conformité Congo",
+      "administratif Kinshasa",
+      "marchés publics RDC",
+      "BTP Congo",
+      "créer SARL Kinshasa",
+      "permis minier RDC",
+      "RCCM Congo",
+      "licence import export RDC",
+      "facilitation administrative RDC",
+      "agréa africa",
+    ].join(", "),
+    authors: [{ name: "Agréa Africa", url: BASE_URL }],
+    creator: "Agréa Africa",
+    publisher: "Agréa Africa",
+    robots: { index: true, follow: true },
+    alternates: { canonical: BASE_URL },
+    openGraph: {
+      title: tServer("meta.og_title") || "Agréa Africa — Facilitation administrative et réglementaire en RDC",
+      description: tServer("meta.og_desc") ||
+        "Plateforme de facilitation administrative en RDC. Diagnostic de conformité, guides sectoriels, constitution de dossiers, suivi jusqu'à l'obtention.",
+      url: BASE_URL,
+      siteName: "Agréa Africa",
+      locale: "fr_CD", // You might want to map this dynamically based on language later
+      type: "website",
+      images: [
+        {
+          url: `${BASE_URL}/og-default.png`,
+          width: 1200,
+          height: 630,
+          alt: "Agréa Africa — Conformité Administrative en RDC",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: tServer("meta.tw_title") || "Agréa Africa — Conformité Administrative en RDC",
+      description: tServer("meta.tw_desc") ||
+        "Diagnostic de conformité, guides sectoriels et accompagnement administratif pour les entreprises en RDC.",
+      images: [`${BASE_URL}/og-default.png`],
+      site: "@agreaafrica",
+    },
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const tServer = await getTranslationContext();
+
   return (
     <html lang="fr" className={inter.variable}>
       <body>
@@ -114,11 +121,11 @@ export default function RootLayout({
                   "name": "Agréa Africa",
                   "url": BASE_URL,
                   "logo": `${BASE_URL}/apple-touch-icon.png`,
-                  "description":
+                  "description": tServer("jsonld.org_desc") ||
                     "Agréa accompagne les entreprises de la RDC dans leurs démarches administratives, réglementaires et de conformité.",
                   "areaServed": {
                     "@type": "Country",
-                    "name": "République Démocratique du Congo",
+                    "name": tServer("jsonld.country_name") || "République Démocratique du Congo",
                   },
                   "address": {
                     "@type": "PostalAddress",
@@ -129,7 +136,7 @@ export default function RootLayout({
                     {
                       "@type": "ContactPoint",
                       "contactType": "customer service",
-                      "availableLanguage": ["French"],
+                      "availableLanguage": ["French", "English", "Chinese"],
                     },
                   ],
                 },
@@ -145,7 +152,7 @@ export default function RootLayout({
                     "price": "0",
                     "priceCurrency": "USD",
                   },
-                  "description":
+                  "description": tServer("jsonld.software_desc") ||
                     "Outil de diagnostic de conformité administrative pour les entreprises opérant en République Démocratique du Congo.",
                 },
               ]),
@@ -156,3 +163,4 @@ export default function RootLayout({
     </html>
   );
 }
+

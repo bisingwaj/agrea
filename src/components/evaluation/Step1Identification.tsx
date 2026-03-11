@@ -50,10 +50,35 @@ export default function Step1Identification({ form, updateForm }: Props) {
         { value: "200+", label: t("evaluation.step1.ec_200") },
     ];
 
-    const CITIES = [
-        "Kinshasa", "Lubumbashi", "Mbuji-Mayi", "Kisangani", "Kananga",
-        "Bukavu", "Tshikapa", "Kolwezi", "Likasi", "Matadi",
-        "Butembo", "Goma", "Mbandaka", "Kikwit", t("evaluation.step1.other")
+    // Les 26 provinces de la RDC
+    const PROVINCES = [
+        "Kinshasa",
+        "Kongo-Central",
+        "Kwango",
+        "Kwilu",
+        "Mai-Ndombe",
+        "Kasaï",
+        "Kasaï-Central",
+        "Kasaï-Oriental",
+        "Lomami",
+        "Sankuru",
+        "Maniema",
+        "Sud-Kivu",
+        "Nord-Kivu",
+        "Ituri",
+        "Haut-Uele",
+        "Tshopo",
+        "Bas-Uele",
+        "Équateur",
+        "Tshuapa",
+        "Mongala",
+        "Nord-Ubangi",
+        "Sud-Ubangi",
+        "Lualaba",
+        "Haut-Katanga",
+        "Haut-Lomami",
+        "Tanganyika",
+        t("evaluation.step1.other"),
     ];
 
     return (
@@ -122,7 +147,7 @@ export default function Step1Identification({ form, updateForm }: Props) {
                     style={inputStyle}
                 >
                     <option value="">{t("evaluation.step1.city_placeholder")}</option>
-                    {CITIES.map((c) => (
+                    {PROVINCES.map((c) => (
                         <option key={c} value={c}>{c}</option>
                     ))}
                 </select>

@@ -64,7 +64,8 @@ export const fr = {
                         hint: "Plusieurs choix possibles.",
                         def1: "Faire un audit de ma situation réglementaire",
                         def2: "Mettre mon entreprise en conformité",
-                        def3: "Étendre mon activité à un nouveau secteur"
+                        def3: "Étendre mon activité à un nouveau secteur",
+                        other: "Autre (préciser à l'étape suivante)"
                 },
                 step4: {
                         desc: "Parmi ces documents spécifiques à votre secteur, lesquels avez-vous <strong>déjà obtenus</strong> ?",

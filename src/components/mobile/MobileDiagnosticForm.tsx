@@ -71,68 +71,23 @@ const BASE_DOCS = [
 
 type BoolField = "hasRccm" | "hasNif" | "hasCnss" | "hasInss" | "hasFiscalAttestation";
 
-const OBJECTIVES_BY_SECTOR: Record<string, { id: string; label: string }[]> = {
-    btp: [
-        { id: "permis-construire", label: "data_objectives.permis-construire.label" },
-        { id: "agrement-btp", label: "data_objectives.agrement-btp.label" },
-        { id: "eie", label: "data_objectives.eie.label" },
-        { id: "marche-public-btp", label: "data_objectives.dossier-soumission.label" },
-    ],
-    "marches-publics": [
-        { id: "dossier-soumission", label: "data_objectives.dossier-soumission.label" },
-        { id: "attestation-fiscale", label: "data_objectives.attestation-fiscale.label" },
-        { id: "attestation-cnss", label: "data_objectives.attestation-cnss.label" },
-    ],
-    "creation-entreprise": [
-        { id: "immatriculation-rccm", label: "data_objectives.immatriculation-rccm.label" },
-        { id: "numero-nif", label: "data_objectives.numero-nif.label" },
-        { id: "numero-inss", label: "data_objectives.numero-inss.label" },
-    ],
-    "import-export": [
-        { id: "licence-importation", label: "data_objectives.licence-importation.label" },
-        { id: "certificat-conformite-import", label: "data_objectives.certificat-conformite-import.label" },
-        { id: "regime-douanier", label: "data_objectives.regime-douanier.label" },
-    ],
-    sante: [
-        { id: "pharmacie-autorisation", label: "data_objectives.pharmacie-autorisation.label" },
-        { id: "clinique-agrement", label: "data_objectives.clinique-agrement.label" },
-    ],
-    mines: [
-        { id: "permis-recherche-miniere", label: "data_objectives.permis-recherche-miniere.label" },
-        { id: "droits-exploitation", label: "data_objectives.droits-exploitation.label" },
-        { id: "conformite-code-minier", label: "data_objectives.conformite-code-minier.label" },
-    ],
-    transport: [
-        { id: "immatriculation-flotte", label: "data_sectors.transport.name" },
-        { id: "permis-professionnel", label: "evaluation.step1.city_label" },
-    ],
-    telecoms: [
-        { id: "agrement-arptc", label: "data_sectors.telecoms.name" },
-        { id: "frequence-radio", label: "data_sectors.telecoms.desc" },
-    ],
-    education: [
-        { id: "agrement-epst", label: "data_sectors.education.name" },
-        { id: "ouverture-ecole", label: "data_sectors.education.desc" },
-    ],
-    agriculture: [
-        { id: "concession-agricole", label: "data_sectors.agriculture.name" },
-        { id: "certificat-phytosanitaire", label: "data_sectors.agriculture.desc" },
-    ],
-    securite: [
-        { id: "agrement-gardiennage", label: "data_sectors.securite.name" },
-        { id: "port-armes", label: "data_sectors.securite.desc" },
-    ],
-    finance: [
-        { id: "agrement-bcc", label: "data_sectors.finance.name" },
-        { id: "agrement-arca", label: "data_sectors.finance.desc" },
-    ],
+// Number of objectives per sector (matches data_sectors locale keys)
+const SECTOR_OBJECTIVES_COUNT: Record<string, number> = {
+    "creation-entreprise": 5,
+    "btp": 5,
+    "marches-publics": 5,
+    "import-export": 5,
+    "sante": 5,
+    "transport": 5,
+    "mines": 5,
+    "telecoms": 5,
+    "education": 5,
+    "agriculture": 5,
+    "securite": 5,
+    "finance": 5,
 };
 
-const DEFAULT_OBJECTIVES = [
-    { id: "audit-conformite", label: "Audit de conformité" },
-    { id: "mise-conformite-generale", label: "Mise en conformité" },
-    { id: "extension-activite", label: "Extension d'activité" },
-];
+// DEFAULT_OBJECTIVES is now a function that uses t() — handled inline below
 
 const SECTOR_DOCUMENTS: Record<string, { id: string; label: string }[]> = {
     btp: [
@@ -353,7 +308,19 @@ export default function MobileDiagnosticForm() {
         }
     };
 
-    const objectives = OBJECTIVES_BY_SECTOR[form.sector] ?? DEFAULT_OBJECTIVES;
+    // Build objectives dynamically from locale keys
+    const objCount = SECTOR_OBJECTIVES_COUNT[form.sector];
+    const objectives: { id: string; label: string }[] = objCount
+        ? Array.from({ length: objCount }, (_, i) => ({
+              id: `${form.sector}-obj-${i}`,
+              label: t(`data_sectors.${form.sector}.objectives_list.${i}` as any),
+          })).concat([{ id: "autres", label: t("evaluation.step3.other") }])
+        : [
+              { id: "audit-conformite", label: t("evaluation.step3.def1") },
+              { id: "mise-conformite-generale", label: t("evaluation.step3.def2") },
+              { id: "extension-activite", label: t("evaluation.step3.def3") },
+              { id: "autres", label: t("evaluation.step3.other") },
+          ];
     const documents = SECTOR_DOCUMENTS[form.sector] ?? DEFAULT_DOCUMENTS;
 
     // ── SCREEN DEFINITIONS ──

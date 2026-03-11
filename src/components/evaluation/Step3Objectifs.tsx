@@ -1,55 +1,50 @@
+"use client";
 import { DiagnosticData } from "@/lib/scoring";
 import { useTranslation } from "@/lib/i18n";
+import { creationSector, industrySectors } from "@/data/sectors";
 
 interface Props {
     form: DiagnosticData;
     updateForm: (patch: Partial<DiagnosticData>) => void;
 }
 
-const OBJECTIVES_BY_SECTOR: Record<string, { id: string; label: string }[]> = {
-    btp: [
-        { id: "permis-construire", label: "Obtenir un permis de construire" },
-        { id: "agrement-btp", label: "Obtenir / renouveler mon agrément BTP" },
-        { id: "eie", label: "Réaliser une étude d'impact environnemental" },
-        { id: "marche-public-btp", label: "Soumissionner à un marché public de travaux" },
-    ],
-    "marches-publics": [
-        { id: "dossier-soumission", label: "Constituer un dossier de soumission" },
-        { id: "agrement-fournisseur", label: "Être référencé comme fournisseur de l'État" },
-        { id: "prequalification", label: "Obtenir une pré-qualification sectorielle" },
-    ],
-    "creation-entreprise": [
-        { id: "immatriculation-rccm", label: "Immatriculer ma société au RCCM" },
-        { id: "ouverture-compte", label: "Ouvrir un compte bancaire professionnel" },
-        { id: "mise-conformite", label: "Mettre à jour mes documents légaux" },
-    ],
-    "import-export": [
-        { id: "licence-importation", label: "Obtenir une licence d'importation" },
-        { id: "certificat-origine", label: "Obtenir un certificat d'origine CEPGL/COMESA" },
-        { id: "agrement-exportateur", label: "Être agréé exportateur" },
-    ],
-    sante: [
-        { id: "pharmacie-autorisation", label: "Ouvrir une pharmacie / officine" },
-        { id: "clinique-agrement", label: "Obtenir l'agrément pour une clinique / cabinet" },
-        { id: "importation-medicaments", label: "Importer des médicaments (DPM)" },
-    ],
-    mines: [
-        { id: "permis-exploitation", label: "Obtenir un permis d'exploitation minière" },
-        { id: "permis-recherche", label: "Obtenir un permis de recherche minière" },
-        { id: "conformite-environnementale", label: "Mettre en conformité environnementale" },
-    ],
+// All sector IDs with their number of objectives (matching data_sectors locale keys)
+const SECTOR_OBJECTIVES_COUNT: Record<string, number> = {
+    "creation-entreprise": 5,
+    "btp": 5,
+    "marches-publics": 5,
+    "import-export": 5,
+    "sante": 5,
+    "transport": 5,
+    "mines": 5,
+    "telecoms": 5,
+    "education": 5,
+    "agriculture": 5,
+    "securite": 5,
+    "finance": 5,
 };
 
 export default function Step3Objectifs({ form, updateForm }: Props) {
     const { t } = useTranslation();
 
-    const DEFAULT_OBJECTIVES = [
-        { id: "audit-conformite", label: t("evaluation.step3.def1") },
-        { id: "mise-conformite-generale", label: t("evaluation.step3.def2") },
-        { id: "extension-activite", label: t("evaluation.step3.def3") },
-    ];
+    // Build objectives from locale keys (always translated)
+    const count = SECTOR_OBJECTIVES_COUNT[form.sector];
+    const objectives: { id: string; label: string }[] = count
+        ? Array.from({ length: count }, (_, i) => ({
+              id: `${form.sector}-obj-${i}`,
+              label: t(`data_sectors.${form.sector}.objectives_list.${i}` as any),
+          }))
+        : [
+              { id: "audit-conformite", label: t("evaluation.step3.def1") },
+              { id: "mise-conformite-generale", label: t("evaluation.step3.def2") },
+              { id: "extension-activite", label: t("evaluation.step3.def3") },
+          ];
 
-    const objectives = OBJECTIVES_BY_SECTOR[form.sector] ?? DEFAULT_OBJECTIVES;
+    // Add "Autres" option
+    const withOther = [
+        ...objectives,
+        { id: "autres", label: t("evaluation.step3.other") },
+    ];
 
     const toggle = (id: string) => {
         const current = form.objectives;
@@ -68,7 +63,7 @@ export default function Step3Objectifs({ form, updateForm }: Props) {
             </p>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                {objectives.map((obj) => {
+                {withOther.map((obj) => {
                     const selected = form.objectives.includes(obj.id);
                     return (
                         <button

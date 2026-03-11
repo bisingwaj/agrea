@@ -28,9 +28,9 @@ export default function MobileBurgerMenu({ isOpen, onClose }: MobileBurgerMenuPr
     ];
 
     const quickSectors = [
-        { href: "/btp", label: t("sectors.btp.name" as any) || "BTP & Construction" },
-        { href: "/mines", label: t("sectors.mines.name" as any) || "Mines & Carrières" },
-        { href: "/creation-entreprise", label: t("sectors.creation-entreprise.name" as any) || "Création d'Entreprise" },
+        { href: "/btp", label: t("data_sectors.btp.name" as any) || "BTP & Construction" },
+        { href: "/mines", label: t("data_sectors.mines.name" as any) || "Mines & Carrières" },
+        { href: "/agriculture", label: t("data_sectors.agriculture.name" as any) || "Agriculture" },
     ];
 
     return (

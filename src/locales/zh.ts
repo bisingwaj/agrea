@@ -264,6 +264,15 @@ export const zh = {
             modal_success: "您的申请已被记录。指南将在几分钟内发送到您的电子邮件。",
         }
     },
+    blog: {
+        meta_title: "分析与出版物 | Agréa",
+        meta_desc: "深入洞察、监管解析和在刚果（金）管理与合规企业的实用建议。",
+        badge: "Agréa 博客",
+        title: "分析与出版物",
+        desc: "解析刚果（金）监管的复杂性，将您的义务转变为战略优势。",
+        empty_title: "新文章即将发布。",
+        empty_desc: "我们的专家目前正在完善关于税务和劳动法的深入分析。"
+    },
     veille: {
         badge: "法规监控",
         title: "绝不错过刚果（金）任何法规变动",
@@ -804,5 +813,61 @@ export const zh = {
             "description": "由省级药品检查员在实地考察后编制的报告。",
             "tip": "在申请检查和实际访问之间预留 2 至 3 个月。"
         }
+    },
+    sector: {
+        procedures_title: "程序与义务",
+        official_delay: "官方时限",
+        not_specified: "未指定",
+        back_to_sectors: "返回行业列表",
+        guide_label: "行业指南",
+        cta_card_title: "获取免费合规诊断",
+        cta_card_desc: "避免罚款和运营延误。在不到 3 分钟的时间内，生成您业务所需的详尽且经过认证的文件清单。",
+        feature_1: "先决条件清单",
+        feature_2: "官方截止日期",
+        feature_3: "预计成本",
+        feature_4: "免费 PDF 报告",
+        social_proof: "每月有超过 500 家公司使用 Agréa 进行合规管理。",
+        start_btn: "开始我的诊断",
+        procedures_title_full: "义务文件与流程",
+        procedures_count: "正式列出的合法经营程序。",
+        label_delay: "法定时限",
+        label_agency: "机构",
+        not_provided: "不适用",
+        more_procedures: "其他已确定的监管义务。",
+        view_all_btn: "查看完整诊断"
+    },
+    company: {
+        type: {
+            cooperative: "合作社",
+            ngo: "非政府组织 / 非营利机构",
+            other: "其他"
+        }
+    },
+    contact: {
+        name_label: "姓名",
+        name_placeholder: "张三",
+        whatsapp_label: "WhatsApp 号码",
+        whatsapp_placeholder: "您的 WhatsApp 号码",
+        email_label: "电子邮箱",
+        optional: "可选"
+    },
+    result: {
+        hero_label: "合规指南",
+        hero_title_prefix: "如何在刚果金获得：",
+        hero_title_suffix: " ？",
+        hero_desc_suffix: "发现验证此法律程序所需的确切、经过认证且最新的文件清单。",
+        label_delay: "预计时限",
+        label_cost: "官方费用",
+        cost_official: "官方规费",
+        btn_support: "获得支持",
+        required_title: "必需材料",
+        optional_title: "补充材料（推荐）",
+        label_source: "来源",
+        cta_support_title: "委托我们处理",
+        cta_support_desc: "Agréa 负责整理并提交您的全套卷宗。透明跟踪直至办结。",
+        cta_support_btn: "开始我的陪伴服务"
+    },
+    common: {
+        days: "天"
     }
 };

@@ -274,6 +274,15 @@ export const en = {
             modal_success: "Your request has been registered. The guide will be sent to your email within minutes.",
         }
     },
+    blog: {
+        meta_title: "Insights & Analysis | Agréa",
+        meta_desc: "Insights, regulatory deciphering and practical advice for the management and compliance of your business in the DRC.",
+        badge: "Agréablog",
+        title: "Insights & Analysis",
+        desc: "Deciphering Congolese regulatory complexity to transform your obligations into strategic advantages.",
+        empty_title: "New publications are coming very soon.",
+        empty_desc: "Our experts are currently finalizing cutting-edge analyses on taxation and labor law."
+    },
     veille: {
         badge: "Regulatory Watch",
         title: "Never miss a regulatory change in the DRC",
@@ -814,5 +823,61 @@ export const en = {
             "description": "Report established by the provincial pharmaceutical inspector following the site visit.",
             "tip": "Allow 2 to 3 months between the inspection request and the actual visit."
         }
+    },
+    sector: {
+        procedures_title: "Procedures and Obligations",
+        official_delay: "Official Delay",
+        not_specified: "Not specified",
+        back_to_sectors: "Back to sectors",
+        guide_label: "Sector Guide",
+        cta_card_title: "Get your free compliance diagnostic",
+        cta_card_desc: "Avoid fines and operational delays. In less than 3 minutes, generate the exhaustive and certified list of documents required for your activities.",
+        feature_1: "Prerequisites list",
+        feature_2: "Official deadlines",
+        feature_3: "Estimated costs",
+        feature_4: "Free PDF report",
+        social_proof: "Over 500 companies use Agréa for their compliance monthly.",
+        start_btn: "Start my Diagnostic",
+        procedures_title_full: "Obligatory Documents & Steps",
+        procedures_count: "officially listed procedures to operate legally.",
+        label_delay: "Legal delay",
+        label_agency: "Agency",
+        not_provided: "N/A",
+        more_procedures: "other identified regulatory obligations.",
+        view_all_btn: "View full diagnostic"
+    },
+    company: {
+        type: {
+            cooperative: "Cooperative",
+            ngo: "NGO / Non-profit",
+            other: "Other"
+        }
+    },
+    contact: {
+        name_label: "First Name / Last Name",
+        name_placeholder: "John Doe",
+        whatsapp_label: "WhatsApp Number",
+        whatsapp_placeholder: "Your WhatsApp number",
+        email_label: "Email",
+        optional: "optional"
+    },
+    result: {
+        hero_label: "Compliance Guide",
+        hero_title_prefix: "How to obtain: ",
+        hero_title_suffix: " in DRC?",
+        hero_desc_suffix: "Discover the exact, certified, and up-to-date list of documents required to validate this legal process.",
+        label_delay: "Estimated delay",
+        label_cost: "Official cost",
+        cost_official: "Official fees",
+        btn_support: "Get support",
+        required_title: "Mandatory documents",
+        optional_title: "Additional documents (Recommended)",
+        label_source: "Source",
+        cta_support_title: "Entrust us with this file",
+        cta_support_desc: "Agréa compiles and submits your complete file. Transparent tracking until obtained.",
+        cta_support_btn: "Start my accompaniment"
+    },
+    common: {
+        days: "days"
     }
 };

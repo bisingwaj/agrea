@@ -13,29 +13,32 @@ export async function getTranslationContext() {
     const cookieStore = await cookies();
     const lang = cookieStore.get("agrea_lang")?.value || "FR";
 
-    return function tServer(path: string): string {
-        const keys = path.split(".");
-        let current: any = dictionaries[lang] || fr;
-        let fallback: any = fr;
+    return {
+        t: function tServer(path: string): string {
+            const keys = path.split(".");
+            let current: any = dictionaries[lang] || fr;
+            let fallback: any = fr;
 
-        for (const key of keys) {
-            if (current && current[key] !== undefined) {
-                current = current[key];
-            } else {
-                // Try fallback to FR
-                let tempFallback = fallback;
-                for (const k of keys) {
-                    if (tempFallback && tempFallback[k] !== undefined) {
-                        tempFallback = tempFallback[k];
-                    } else {
-                        return path;
+            for (const key of keys) {
+                if (current && current[key] !== undefined) {
+                    current = current[key];
+                } else {
+                    // Try fallback to FR
+                    let tempFallback = fallback;
+                    for (const k of keys) {
+                        if (tempFallback && tempFallback[k] !== undefined) {
+                            tempFallback = tempFallback[k];
+                        } else {
+                            return path;
+                        }
                     }
+                    current = tempFallback;
+                    break;
                 }
-                current = tempFallback;
-                break;
             }
-        }
 
-        return typeof current === "string" ? current : path;
+            return typeof current === "string" ? current : path;
+        },
+        lang
     };
 }

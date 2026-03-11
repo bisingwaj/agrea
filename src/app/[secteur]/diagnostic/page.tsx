@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const { secteur } = await params;
     const sector = getSectorById(secteur);
     if (!sector) return {};
-    const tServer = await getTranslationContext();
+    const { t: tServer } = await getTranslationContext();
     return {
         title: `Diagnostic de conformité ${tServer(sector.name)} | Agréa`,
         description: "Évaluez vos obligations réglementaires instantanément.",

@@ -7,7 +7,7 @@ import { StaggerReveal } from "@/components/animations/StaggerReveal";
 import { Parallax } from "@/components/animations/Parallax";
 
 export async function generateMetadata() {
-    const tServer = await getTranslationContext();
+    const { t: tServer } = await getTranslationContext();
     return {
         title: "À propos d'Agréa Africa",
         description: tServer("about.hero_desc"),
@@ -15,7 +15,7 @@ export async function generateMetadata() {
 }
 
 export default async function AboutPage() {
-    const tServer = await getTranslationContext();
+    const { t: tServer } = await getTranslationContext();
 
     const STATS = [
         { value: tServer("about.impact_1_val"), label: tServer("about.impact_1_lbl") },

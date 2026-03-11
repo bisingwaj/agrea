@@ -277,6 +277,15 @@ export const fr = {
                     modal_success: "Votre demande a bien été enregistrée. Le guide vous sera envoyé par email d'ici quelques minutes.",
                 }
         },
+        blog: {
+                meta_title: "Analyses & Publications | Agréa",
+                meta_desc: "Insights, décryptages réglementaires et conseils pratiques pour la gestion et la conformité de votre entreprise en RDC.",
+                badge: "Agréablog",
+                title: "Analyses & Publications",
+                desc: "Décrypter la complexité réglementaire congolaise pour transformer vos obligations en avantages stratégiques.",
+                empty_title: "De nouvelles publications arrivent très bientôt.",
+                empty_desc: "Nos experts finalisent actuellement des analyses pointues sur la fiscalité et le droit social."
+        },
         veille: {
                 badge: "Veille réglementaire",
                 title: "Ne manquez aucun changement réglementaire en RDC",
@@ -835,5 +844,61 @@ export const fr = {
                         "description": "Rapport établi par l'inspecteur pharmaceutique provincial suite à la visite des locaux.",
                         "tip": "Prévoir 2 à 3 mois entre la demande d'inspection et la visite effective."
                 }
+        },
+    sector: {
+        procedures_title: "Procédures et obligations",
+        official_delay: "Délai officiel",
+        not_specified: "Non spécifié",
+        back_to_sectors: "Retour aux secteurs",
+        guide_label: "Guide Sectoriel",
+        cta_card_title: "Obtenez votre diagnostic de conformité gratuit",
+        cta_card_desc: "Évitez les amendes et les retards opérationnels. En moins de 3 minutes, générez la liste exhaustive et certifiée des documents requis pour vos activités.",
+        feature_1: "Liste des prérequis",
+        feature_2: "Délais officiels",
+        feature_3: "Coûts estimatifs",
+        feature_4: "Rapport PDF offert",
+        social_proof: "Plus de 500 entreprises utilisent Agréa pour leur conformité mensuellement.",
+        start_btn: "Démarrer mon Diagnostic",
+        procedures_title_full: "Documents & Démarches Obligations",
+        procedures_count: "procédures officiellement recensées pour opérer légalement.",
+        label_delay: "Délai légal",
+        label_agency: "Organisme",
+        not_provided: "Non spécifié",
+        more_procedures: "autres obligations réglementaires identifiées.",
+        view_all_btn: "Voir tout le diagnostic"
+    },
+    company: {
+        type: {
+            cooperative: "Coopérative",
+            ngo: "ONG / ASBL",
+            other: "Autre"
         }
+    },
+    contact: {
+        name_label: "Prénom / Nom",
+        name_placeholder: "Jean Mbeki",
+        whatsapp_label: "Numéro WhatsApp",
+        whatsapp_placeholder: "Votre numéro WhatsApp",
+        email_label: "Email",
+        optional: "optionnel"
+    },
+    result: {
+        hero_label: "Guide de Conformité",
+        hero_title_prefix: "Comment obtenir : ",
+        hero_title_suffix: " en RDC ?",
+        hero_desc_suffix: "Découvrez la liste exacte, certifiée et à jour des documents requis pour valider cette démarche légale.",
+        label_delay: "Délai estimé",
+        label_cost: "Coût officiel",
+        cost_official: "Frais officiels",
+        btn_support: "Être accompagné",
+        required_title: "Pièces obligatoires à fournir",
+        optional_title: "Documents complémentaires (Recommandés)",
+        label_source: "Source",
+        cta_support_title: "Confiez-nous ce dossier",
+        cta_support_desc: "Agréa constitue et dépose votre dossier complet. Suivi transparent jusqu'à l'obtention.",
+        cta_support_btn: "Démarrer mon accompagnement"
+    },
+    common: {
+        days: "jours"
+    }
 };

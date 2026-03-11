@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getArticleData, getAllArticleSlugs } from '@/lib/articles';
+import { getTranslationContext } from '@/lib/tServer';
 import ArticleHeader from '@/components/blog/ArticleHeader';
 import Prose from '@/components/blog/Prose';
 import BlogCTA from '@/components/blog/BlogCTA';
@@ -17,7 +18,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const resolvedParams = await params;
-    const postData = getArticleData(resolvedParams.slug);
+    const { lang } = await getTranslationContext();
+    const postData = getArticleData(resolvedParams.slug, lang);
 
     if (!postData) {
         return {
@@ -41,7 +43,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = await params;
-    const postData = getArticleData(resolvedParams.slug);
+    const { lang } = await getTranslationContext();
+    const postData = getArticleData(resolvedParams.slug, lang);
 
     if (!postData) {
         notFound();

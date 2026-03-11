@@ -18,7 +18,7 @@ const inter = Inter({
 const BASE_URL = "https://agrea.africa";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const tServer = await getTranslationContext();
+  const { t: tServer } = await getTranslationContext();
   
   return {
     metadataBase: new URL(BASE_URL),
@@ -79,10 +79,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const tServer = await getTranslationContext();
+  const { t: tServer, lang } = await getTranslationContext();
 
   return (
-    <html lang="fr" className={inter.variable}>
+    <html lang={lang.toLowerCase()} className={inter.variable}>
       <body>
         <LanguageProvider>
           {/*

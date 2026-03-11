@@ -205,7 +205,9 @@ export const industrySectors: Sector[] = [
     },
 ];
 
-export const sectors: Sector[] = [creationSector, ...industrySectors];
+export const sectors: Sector[] = [
+    ...industrySectors.filter(s => s.id !== "marches-publics" && s.id !== "creation-entreprise")
+];
 
 export function getSectorById(id: string): Sector | undefined {
     return sectors.find((s) => s.id === id);

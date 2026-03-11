@@ -38,13 +38,13 @@ const EMPTY_FORM: DiagnosticData = {
 
 // ─── SUB-DATA ─────────────────────────────────────────────────────────────────
 
-const COMPANY_TYPES = [
+const COMPANY_TYPES = (t: any) => [
     { value: "sarl", label: "SARL" },
     { value: "sa", label: "S.A." },
     { value: "eurl", label: "EURL" },
-    { value: "cooperative", label: "Coopérative" },
-    { value: "ngo", label: "ONG / ASBL" },
-    { value: "other", label: "Autre" },
+    { value: "cooperative", label: t("company.type.cooperative") || "Coopérative" },
+    { value: "ngo", label: t("company.type.ngo") || "ONG / ASBL" },
+    { value: "other", label: t("company.type.other") || "Autre" },
 ];
 
 const EMPLOYEE_COUNTS = [
@@ -55,10 +55,12 @@ const EMPLOYEE_COUNTS = [
     { value: "200+", label: "200+" },
 ];
 
-const CITIES = [
-    "Kinshasa", "Lubumbashi", "Mbuji-Mayi", "Kisangani", "Kananga",
-    "Bukavu", "Tshikapa", "Kolwezi", "Likasi", "Matadi",
-    "Butembo", "Goma", "Mbandaka", "Kikwit", "Autre",
+const PROVINCES = [
+    "Bas-Uele", "Équateur", "Haut-Katanga", "Haut-Lomami", "Haut-Uele", "Ituri",
+    "Kasaï", "Kasaï-Central", "Kasaï-Oriental", "Kinshasa", "Kongo-Central",
+    "Kwango", "Kwilu", "Lomami", "Lualaba", "Mai-Ndombe", "Maniema", "Mongala",
+    "Nord-Kivu", "Nord-Ubangi", "Sankuru", "Sud-Kivu", "Sud-Ubangi", "Tanganyika",
+    "Tshopo", "Tshuapa", "Autre"
 ];
 
 const BASE_DOCS = [
@@ -253,6 +255,7 @@ export default function MobileDiagnosticForm() {
 
     const [screen, setScreen] = useState(0);
     const [form, setForm] = useState<DiagnosticData>(EMPTY_FORM);
+    const [customCity, setCustomCity] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
     const isCreation = form.sector === "creation-entreprise";
@@ -300,6 +303,7 @@ export default function MobileDiagnosticForm() {
                     timeSlot: "Diagnostic soumis",
                     source: "diagnostic",
                     sector: form.sector,
+                    city: form.city === "Autre" ? customCity : form.city,
                 }),
             }).catch(() => { });
             router.push("/mon-rapport");
@@ -308,12 +312,12 @@ export default function MobileDiagnosticForm() {
         }
     };
 
-    // Build objectives dynamically from locale keys
-    const objCount = SECTOR_OBJECTIVES_COUNT[form.sector];
-    const objectives: { id: string; label: string }[] = objCount
-        ? Array.from({ length: objCount }, (_, i) => ({
+    // Build objectives dynamically from sectors data reference
+    const currentSector = sectors.find(s => s.id === form.sector);
+    const objectives: { id: string; label: string }[] = currentSector 
+        ? currentSector.objectives.map((key, i) => ({
               id: `${form.sector}-obj-${i}`,
-              label: t(`data_sectors.${form.sector}.objectives_list.${i}` as any),
+              label: t(key as any),
           })).concat([{ id: "autres", label: t("evaluation.step3.other") }])
         : [
               { id: "audit-conformite", label: t("evaluation.step3.def1") },
@@ -400,22 +404,36 @@ export default function MobileDiagnosticForm() {
                                 <div style={{ position: "relative" }}>
                                     <select value={form.sector} onChange={(e) => update({ sector: e.target.value })} style={selectSt}>
                                         <option value="">{t("mobile.diagnostic.choose_sector") || "Choisissez un secteur…"}</option>
-                                        {sectors.map((s) => <option key={s.id} value={s.id}>{t(s.name)}</option>)}
+                                        {sectors
+                                            .filter(s => s.id !== "creation-entreprise" && s.id !== "marches-publics")
+                                            .map((s) => <option key={s.id} value={s.id}>{t(s.name)}</option>)}
+                                        <option value="autres">{t("evaluation.step1.other") || "Autres"}</option>
                                     </select>
                                     <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
                                 </div>
                             </div>
                             <div>
-                                <label style={labelSt}>{t("evaluation.step1.city_label") || "Ville de domiciliation"} <span style={{ color: "var(--green-900)" }}>*</span></label>
-                                <div style={{ position: "relative" }}>
-                                    <select value={form.city} onChange={(e) => update({ city: e.target.value })} style={selectSt}>
-                                        <option value="">{t("mobile.diagnostic.choose_city") || "Choisissez une ville…"}</option>
-                                        {CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                    <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
+                                <label style={labelSt}>{t("evaluation.step1.city_label") || "Province d'implantation"} <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                    <div style={{ position: "relative" }}>
+                                        <select value={form.city} onChange={(e) => update({ city: e.target.value })} style={selectSt}>
+                                            <option value="">{t("evaluation.step1.city_placeholder") || "Choisissez une province…"}</option>
+                                            {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
+                                        </select>
+                                        <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
+                                    </div>
+                                    {form.city === "Autre" && (
+                                        <input
+                                            type="text"
+                                            value={customCity}
+                                            onChange={(e) => setCustomCity(e.target.value)}
+                                            placeholder={t("evaluation.step1.city_placeholder") || "Précisez la province..."}
+                                            style={inputSt}
+                                        />
+                                    )}
                                 </div>
                             </div>
-                            {(!form.sector || !form.city) && (
+                            {(!form.sector || !form.city || (form.city === "Autre" && !customCity)) && (
                                 <p style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "4px" }}>
                                     {t("mobile.diagnostic.mandatory_fields") || "Ces deux champs sont obligatoires pour personnaliser votre diagnostic."}
                                 </p>
@@ -431,7 +449,7 @@ export default function MobileDiagnosticForm() {
                             <div>
                                 <label style={labelSt}>{t("mobile.diagnostic.type_structure") || "Type de structure"}</label>
                                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
-                                    {COMPANY_TYPES.map((ct) => (
+                                    {COMPANY_TYPES(t).map((ct) => (
                                         <Chip key={ct.value} label={ct.label} active={form.companyType === ct.value} onClick={() => update({ companyType: ct.value as DiagnosticData["companyType"] })} />
                                     ))}
                                 </div>
@@ -550,28 +568,28 @@ export default function MobileDiagnosticForm() {
                                 </p>
                             </div>
                             <div>
-                                <label style={labelSt}>Prénom / Nom <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <label style={labelSt}>{t("contact.name_label") || "Prénom / Nom"} <span style={{ color: "var(--green-900)" }}>*</span></label>
                                 <input
                                     type="text"
                                     value={form.contactName}
                                     onChange={(e) => update({ contactName: e.target.value })}
-                                    placeholder="Jean Mbeki"
+                                    placeholder={t("contact.name_placeholder") || "Jean Mbeki"}
                                     style={inputSt}
                                     onFocus={(e) => { e.target.style.borderColor = "var(--green-900)"; }}
                                     onBlur={(e) => { e.target.style.borderColor = "var(--border)"; }}
                                 />
                             </div>
                             <div>
-                                <label style={labelSt}>Numéro WhatsApp <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <label style={labelSt}>{t("contact.whatsapp_label") || "Numéro WhatsApp"} <span style={{ color: "var(--green-900)" }}>*</span></label>
                                 <PhoneInput
                                     value={form.contactPhone}
                                     onChange={(val) => update({ contactPhone: val })}
-                                    placeholder="Votre numéro WhatsApp"
+                                    placeholder={t("contact.whatsapp_placeholder") || "Votre numéro WhatsApp"}
                                     required
                                 />
                             </div>
                             <div>
-                                <label style={labelSt}>Email <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 400 }}>(optionnel)</span></label>
+                                <label style={labelSt}>{t("contact.email_label") || "Email"} <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 400 }}>({t("contact.optional") || "optionnel"})</span></label>
                                 <input
                                     type="email"
                                     value={form.contactEmail ?? ""}

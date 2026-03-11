@@ -67,7 +67,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         let current: any = dictionaries[lang];
 
         for (const key of keys) {
-            if (current[key] === undefined) {
+            if (!current || current[key] === undefined) {
                 // Fallback to FR
                 let fallback: any = dictionaries["FR"];
                 for (const k of keys) {

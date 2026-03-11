@@ -4,7 +4,7 @@ import ArticleCard from "@/components/blog/ArticleCard";
 import { getTranslationContext } from "@/lib/tServer";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const tServer = await getTranslationContext();
+    const { t: tServer } = await getTranslationContext();
     return {
         title: tServer("blog.meta_title") || "Analyses & Publications | Agréa",
         description: tServer("blog.meta_desc") || "Insights, décryptages réglementaires et conseils pratiques pour la gestion et la conformité de votre entreprise en RDC.",
@@ -12,8 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AnalysesPage() {
-    const allArticles = getSortedArticlesData();
-    const tServer = await getTranslationContext();
+    const { t: tServer, lang } = await getTranslationContext();
+    const allArticles = getSortedArticlesData(lang);
 
     return (
         <main style={{ background: "var(--bg-main)", minHeight: "100vh" }}>

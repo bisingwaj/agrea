@@ -3,7 +3,7 @@ import { getTranslationContext } from "@/lib/tServer";
 import ContactForm from "@/components/ContactForm";
 
 export async function generateMetadata() {
-    const tServer = await getTranslationContext();
+    const { t: tServer } = await getTranslationContext();
     return {
         title: "Contacter Agréa Africa",
         description: tServer("contact_page.desc"),
@@ -11,7 +11,7 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-    const tServer = await getTranslationContext();
+    const { t: tServer } = await getTranslationContext();
 
     return (
         <section className="section" style={{ paddingBottom: "80px" }}>
@@ -45,7 +45,7 @@ export default async function ContactPage() {
                     {tServer("contact_page.desc")}
                 </p>
 
-                <ContactForm t={tServer} />
+                <ContactForm />
             </div>
         </section>
     );

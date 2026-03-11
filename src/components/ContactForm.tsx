@@ -18,11 +18,10 @@ const TIME_SLOTS = [
     "16h00 – 18h00",
 ];
 
-interface ContactFormProps {
-    t: (key: string) => string;
-}
+import { useTranslation } from "@/lib/i18n";
 
-export default function ContactForm({ t }: ContactFormProps) {
+export default function ContactForm() {
+    const { t } = useTranslation();
     const [form, setForm] = useState<FormData>({ firstName: "", phone: "", timeSlot: "" });
     const [errors, setErrors] = useState<Partial<FormData>>({});
     const [submitted, setSubmitted] = useState(false);

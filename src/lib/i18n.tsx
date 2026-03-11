@@ -31,19 +31,23 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         const storedLang = localStorage.getItem("agrea_lang") as LocaleKey;
         if (storedLang && ["FR", "EN", "ZH"].includes(storedLang)) {
             setLangState(storedLang);
+            document.cookie = `agrea_lang=${storedLang}; path=/; max-age=31536000; SameSite=Lax`;
         } else {
             // Détection automatique de la langue du navigateur/système
             const browserLang = navigator.language.toLowerCase();
             if (browserLang.startsWith("zh")) {
                 setLangState("ZH");
                 localStorage.setItem("agrea_lang", "ZH");
+                document.cookie = `agrea_lang=ZH; path=/; max-age=31536000; SameSite=Lax`;
             } else if (browserLang.startsWith("en")) {
                 setLangState("EN");
                 localStorage.setItem("agrea_lang", "EN");
+                document.cookie = `agrea_lang=EN; path=/; max-age=31536000; SameSite=Lax`;
             } else {
                 // Par défaut en zone francophone ou autre
                 setLangState("FR");
                 localStorage.setItem("agrea_lang", "FR");
+                document.cookie = `agrea_lang=FR; path=/; max-age=31536000; SameSite=Lax`;
             }
         }
         setMounted(true);
@@ -52,6 +56,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const setLang = (newLang: LocaleKey) => {
         setLangState(newLang);
         localStorage.setItem("agrea_lang", newLang);
+        document.cookie = `agrea_lang=${newLang}; path=/; max-age=31536000; SameSite=Lax`;
+        
+        // Refresh the page to trigger Server Components re-rendering with the new cookie
+        window.location.reload();
     };
 
     const t = (path: string, variables?: Record<string, string | number>): string => {

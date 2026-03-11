@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { getSectorById, sectors } from "@/data/sectors";
 import proceduresData from "@/data/procedures.json";
-import { tServer } from "@/lib/tServer";
+import { getTranslationContext } from "@/lib/tServer";
 
 export function generateStaticParams() {
     return sectors.map((s) => ({ secteur: s.id }));
@@ -13,6 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const { secteur } = await params;
     const sector = getSectorById(secteur);
     if (!sector) return {};
+
+    const tServer = await getTranslationContext();
 
     const sectorName = tServer(sector.name);
     const sectorDesc = tServer(sector.description);
@@ -47,6 +49,7 @@ export default async function SectorPage({ params }: { params: Promise<{ secteur
 
     if (!sector) notFound();
 
+    const tServer = await getTranslationContext();
     const procedures = (proceduresData as any)[sector.sheetName] || [];
 
     return (

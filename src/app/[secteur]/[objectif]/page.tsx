@@ -5,7 +5,7 @@ import { getSectorById, sectors } from "@/data/sectors";
 import { getObjectiveById, objectives } from "@/data/objectives";
 import { getDocumentsByObjective } from "@/data/documents";
 import PdfDownloadButton from "@/components/result/PdfDownloadButton";
-import { tServer } from "@/lib/tServer";
+import { getTranslationContext } from "@/lib/tServer";
 
 export function generateStaticParams() {
     const params: { secteur: string; objectif: string }[] = [];
@@ -21,6 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const { secteur, objectif } = await params;
     const obj = getObjectiveById(objectif);
     if (!obj) return {};
+
+    const tServer = await getTranslationContext();
 
     const title = `${tServer(obj.label)} — Documents requis en RDC`;
     const description = `Téléchargez la liste complète des documents requis pour votre ${tServer(obj.label)} en République Démocratique du Congo. Délai : ${obj.daysMin} à ${obj.daysMax} jours.`;
@@ -54,6 +56,8 @@ export default async function ResultPage({ params }: { params: Promise<{ secteur
     const obj = getObjectiveById(objectif);
 
     if (!sector || !obj) notFound();
+
+    const tServer = await getTranslationContext();
 
     const docs = getDocumentsByObjective(objectif);
     const required = docs.filter((d) => d.isRequired);

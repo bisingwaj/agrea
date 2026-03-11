@@ -3,7 +3,7 @@ import { getSectorById, sectors } from "@/data/sectors";
 import proceduresData from "@/data/procedures.json";
 import DiagnosticWizard from "@/components/diagnostic/DiagnosticWizard";
 
-import { tServer } from "@/lib/tServer";
+import { getTranslationContext } from "@/lib/tServer";
 
 export function generateStaticParams() {
     return sectors.map((s) => ({ secteur: s.id }));
@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const { secteur } = await params;
     const sector = getSectorById(secteur);
     if (!sector) return {};
+    const tServer = await getTranslationContext();
     return {
         title: `Diagnostic de conformité ${tServer(sector.name)} | Agréa`,
         description: "Évaluez vos obligations réglementaires instantanément.",

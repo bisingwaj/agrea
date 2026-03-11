@@ -1,6 +1,7 @@
 // Scoring logic for compliance diagnostic
 
 export interface DiagnosticData {
+    companyName: string;
     // Step 1 — Identification
     sector: string;
     companyType: "sarl" | "sa" | "surl" | "eurl" | "cooperative" | "ngo" | "other";
@@ -31,6 +32,8 @@ export interface ComplianceGap {
     id: string;
     title: string;
     severity: "critical" | "important" | "optional";
+    impact: "high" | "medium" | "low";
+    difficulty: "easy" | "medium" | "hard";
     description: string;
     estimatedDays: number;
     estimatedCostUsd: number;
@@ -53,6 +56,8 @@ const BASE_CHECKS: ComplianceGap[] = [
         id: "rccm",
         title: "Registre de Commerce (RCCM)",
         severity: "critical",
+        impact: "high",
+        difficulty: "medium",
         description: "Le RCCM est obligatoire pour toute activité commerciale en RDC.",
         estimatedDays: 7,
         estimatedCostUsd: 150,
@@ -62,6 +67,8 @@ const BASE_CHECKS: ComplianceGap[] = [
         id: "nif",
         title: "Numéro d'Identification Fiscale (NIF)",
         severity: "critical",
+        impact: "high",
+        difficulty: "easy",
         description: "Le NIF est requis pour toutes les obligations fiscales et commerciales.",
         estimatedDays: 5,
         estimatedCostUsd: 0,
@@ -71,6 +78,8 @@ const BASE_CHECKS: ComplianceGap[] = [
         id: "cnss",
         title: "Affiliation CNSS",
         severity: "important",
+        impact: "medium",
+        difficulty: "medium",
         description: "Obligation légale pour les entreprises ayant des salariés.",
         estimatedDays: 10,
         estimatedCostUsd: 0,
@@ -80,6 +89,8 @@ const BASE_CHECKS: ComplianceGap[] = [
         id: "inss",
         title: "Affiliation INSS",
         severity: "important",
+        impact: "medium",
+        difficulty: "medium",
         description: "Couverture assurance maladie obligatoire pour les employés.",
         estimatedDays: 10,
         estimatedCostUsd: 0,
@@ -89,6 +100,8 @@ const BASE_CHECKS: ComplianceGap[] = [
         id: "fiscal_attestation",
         title: "Attestation de situation fiscale",
         severity: "critical",
+        impact: "high",
+        difficulty: "easy",
         description: "Requise pour tout marché public, appel d'offre ou renouvellement d'agrément.",
         estimatedDays: 3,
         estimatedCostUsd: 0,
@@ -103,6 +116,8 @@ const SECTOR_GAPS: Record<string, ComplianceGap[]> = {
             id: "agrement-btp",
             title: "Agrément BTP (Ministère des ITP)",
             severity: "critical",
+            impact: "high",
+            difficulty: "hard",
             description: "Obligatoire pour soumissionner à des marchés de travaux publics.",
             estimatedDays: 60,
             estimatedCostUsd: 800,
@@ -114,6 +129,8 @@ const SECTOR_GAPS: Record<string, ComplianceGap[]> = {
             id: "caution-soumission",
             title: "Garantie bancaire de soumission",
             severity: "important",
+            impact: "medium",
+            difficulty: "medium",
             description: "2 à 3% du montant estimé, requise pour chaque appel d'offres.",
             estimatedDays: 5,
             estimatedCostUsd: 0,
@@ -125,6 +142,8 @@ const SECTOR_GAPS: Record<string, ComplianceGap[]> = {
             id: "statuts-notaries",
             title: "Statuts notariés",
             severity: "critical",
+            impact: "high",
+            difficulty: "medium",
             description: "Acte constitutif certifié par un notaire agréé, requis pour le RCCM.",
             estimatedDays: 5,
             estimatedCostUsd: 200,
@@ -136,6 +155,8 @@ const SECTOR_GAPS: Record<string, ComplianceGap[]> = {
             id: "licence-importation",
             title: "Licence d'importation",
             severity: "critical",
+            impact: "high",
+            difficulty: "medium",
             description: "Délivrée par le Ministère du Commerce pour toute importation commerciale.",
             estimatedDays: 30,
             estimatedCostUsd: 400,
@@ -147,6 +168,8 @@ const SECTOR_GAPS: Record<string, ComplianceGap[]> = {
             id: "autorisation-minsante",
             title: "Autorisation d'exercice MINSANTE",
             severity: "critical",
+            impact: "high",
+            difficulty: "hard",
             description: "Tout établissement de santé doit être autorisé par le Ministère de la Santé.",
             estimatedDays: 90,
             estimatedCostUsd: 600,
@@ -158,6 +181,8 @@ const SECTOR_GAPS: Record<string, ComplianceGap[]> = {
             id: "permis-exploitation-miniere",
             title: "Permis d'exploitation minière",
             severity: "critical",
+            impact: "high",
+            difficulty: "hard",
             description: "Délivré par le Cadastre Minier (CAMI) selon le Code Minier 2018.",
             estimatedDays: 120,
             estimatedCostUsd: 5000,
@@ -172,71 +197,67 @@ function getLevel(score: number): ScoringResult["level"] {
     if (score >= 35) return "partiel";
     return "non-conforme";
 }
+import { calculateComplianceScore, DiagnosticInput, RuleEvaluationResult } from "./diagnosticEngine";
 
 export function calculateScore(data: DiagnosticData): ScoringResult {
-    const activeGaps: ComplianceGap[] = [];
-    const strengths: string[] = [];
-    let maxPoints = 0;
-    let earnedPoints = 0;
-
-    // Check base documents
-    const baseMap: Record<string, boolean> = {
-        rccm: data.hasRccm,
-        nif: data.hasNif,
-        cnss: data.hasCnss,
-        inss: data.hasInss,
-        fiscal_attestation: data.hasFiscalAttestation,
+    // 1. Convert Data to Engine Input
+    const input: DiagnosticInput = {
+        sector: data.sector,
+        companyType: data.companyType,
+        employeeCount: data.employeeCount,
+        objectives: data.objectives,
+        hasRccm: data.hasRccm,
+        hasNif: data.hasNif,
+        hasCnss: data.hasCnss,
+        hasInss: data.hasInss,
+        hasFiscalAttestation: data.hasFiscalAttestation,
+        ownedDocuments: [...data.existingAccreditations, ...data.documentsObtained]
     };
 
-    const pointWeights: Record<string, number> = {
-        rccm: 25,
-        nif: 20,
-        cnss: 10,
-        inss: 10,
-        fiscal_attestation: 15,
-    };
+    // 2. Calculate using the intelligent Engine Rules
+    const report = calculateComplianceScore(input);
 
-    for (const check of BASE_CHECKS) {
-        const weight = pointWeights[check.id] ?? 10;
-        maxPoints += weight;
-        if (baseMap[check.id]) {
-            earnedPoints += weight;
-            strengths.push(check.title);
-        } else {
-            activeGaps.push(check);
-        }
+    // 3. Map Engine result to UI DTO (ScoringResult)
+    const score = report.totalScore;
+    const strengths = report.matchedRules.filter(r => r.passed).map(r => r.rule.name);
+
+    function mapRuleToGap(res: RuleEvaluationResult, severity: ComplianceGap["severity"]): ComplianceGap {
+        const rule = res.rule;
+        
+        // Parse numbers from strings like "5 à 10 jours" or "100 à 300 USD"
+        const daysMatch = rule.realDeadline?.match(/\d+/g);
+        const estimatedDays = daysMatch ? parseInt(daysMatch[daysMatch.length - 1], 10) : 30; // Take max day bound or default
+        
+        const costMatch = rule.officialCost?.match(/\d+/g);
+        const estimatedCostUsd = costMatch ? parseInt(costMatch[0], 10) : 250; // Take min cost bound or default
+
+        return {
+            id: rule.id,
+            title: rule.name,
+            severity,
+            impact: severity === "critical" ? "high" : severity === "important" ? "medium" : "low",
+            difficulty: "medium", // static fallback for now
+            description: rule.description || "Obligation réglementaire.",
+            estimatedDays,
+            estimatedCostUsd,
+            action: `Obtenir auprès de : ${rule.authority}`
+        };
     }
 
-    // Sector-specific checks
-    const sectorGaps = SECTOR_GAPS[data.sector] ?? [];
-    for (const gap of sectorGaps) {
-        maxPoints += 20;
-        const alreadyHas =
-            data.existingAccreditations.includes(gap.id) || data.documentsObtained.includes(gap.id);
-        if (alreadyHas) {
-            earnedPoints += 20;
-            strengths.push(gap.title);
-        } else {
-            activeGaps.push(gap);
-        }
-    }
+    const gaps: ComplianceGap[] = [
+        ...report.missingCritical.map(r => mapRuleToGap(r, "critical")),
+        ...report.missingMajor.map(r => mapRuleToGap(r, "important")),
+        ...report.missingMinor.map(r => mapRuleToGap(r, "optional"))
+    ];
 
-    const score = maxPoints > 0 ? Math.round((earnedPoints / maxPoints) * 100) : 0;
-
-    // Prioritize gaps by severity
-    const sorted = [...activeGaps].sort((a, b) => {
-        const order = { critical: 0, important: 1, optional: 2 };
-        return order[a.severity] - order[b.severity];
-    });
-
-    const priorityActions = sorted.slice(0, 3).map((g) => g.action);
-    const totalDays = sorted.reduce((acc, g) => Math.max(acc, g.estimatedDays), 0);
-    const totalCost = sorted.reduce((acc, g) => acc + g.estimatedCostUsd, 0);
+    const priorityActions = gaps.slice(0, 3).map((g) => g.action);
+    const totalDays = gaps.reduce((acc, g) => Math.max(acc, g.estimatedDays), 0);
+    const totalCost = gaps.reduce((acc, g) => acc + g.estimatedCostUsd, 0);
 
     return {
         score,
         level: getLevel(score),
-        gaps: sorted,
+        gaps,
         strengths,
         priorityActions,
         estimatedTotalDays: totalDays,

@@ -18,12 +18,33 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ secteur: string; objectif: string }> }) {
-    const { objectif } = await params;
+    const { secteur, objectif } = await params;
     const obj = getObjectiveById(objectif);
     if (!obj) return {};
+
+    const title = `${tServer(obj.label)} — Documents requis en RDC`;
+    const description = `Téléchargez la liste complète des documents requis pour votre ${tServer(obj.label)} en République Démocratique du Congo. Délai : ${obj.daysMin} à ${obj.daysMax} jours.`;
+    const url = `https://agrea.africa/${secteur}/${objectif}`;
+
     return {
-        title: `${tServer(obj.label)} — Liste des documents requis en RDC | Agréa`,
-        description: `Téléchargez la liste complète des documents requis pour votre ${tServer(obj.label)} en République Démocratique du Congo. Délai : ${obj.daysMin} à ${obj.daysMax} jours.`,
+        title,
+        description,
+        keywords: `${tServer(obj.label)} RDC, documents ${tServer(obj.label)} Congo, obtenir ${tServer(obj.label)} Kinshasa`,
+        alternates: { canonical: url },
+        openGraph: {
+            title,
+            description,
+            url,
+            siteName: "Agréa Africa",
+            locale: "fr_CD",
+            type: "article",
+            images: [{ url: "https://agrea.africa/og-default.png", width: 1200, height: 630 }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+        },
     };
 }
 

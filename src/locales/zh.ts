@@ -13,19 +13,6 @@ export const zh = {
         desc: "通过 5 个问题了解您的行政合规水平，并获得定制的行动计划。",
         step: "步骤",
         on: "/",
-        prev: "上一步",
-        next: "继续",
-        submit: "生成报告",
-        generating: "正在生成报告...",
-        footer: "您的数据已进行端到端加密。",
-        step_prefix: "步骤",
-        steps: {
-            s1: "身份验证",
-            s2: "当前情况",
-            s3: "目标",
-            s4: "文档",
-            s5: "确认"
-        },
         step1: {
             sector_label: "业务领域",
             sector_placeholder: "选择您的行业...",
@@ -76,11 +63,13 @@ export const zh = {
         },
         step5: {
             ready: "您的报告即将完成",
-            desc: "请填写您的联系方式以接收您的个性化诊断。如果您愿意，Agrea 顾问将与您联系。",
-            name_label: "姓名",
-            name_placeholder: "王小明",
+            desc: "请填写您的联系方式以接收您的个性化诊断。如果您愿意，Agréa 顾问将与您联系。",
+            name_label: "公司名称",
+            name_placeholder: "例如：我的公司 LLC",
             phone_label: "WhatsApp 号码",
             phone_placeholder: "+243 8X XXX XXXX",
+            user_name_label: "姓名",
+            user_name_placeholder: "王小明",
             email_label: "电子邮件",
             email_opt: "（选填）",
             email_placeholder: "wang@company.cd",
@@ -115,6 +104,7 @@ export const zh = {
         how_3_desc: "不再需要跑往各个部委。专属的Agréa顾问将处理您的档案，直到最终文件签发。",
         sectors_label: "第一步",
         sectors_title: "您想从哪个行业开始？",
+        sectors_title_short: "行业分类",
         sectors_desc: "请选择您的业务领域，查看对应的行政服务目录并启动免费诊断。",
         sectors_procedures: "项专项流程",
         cta_title: "不知从何着手？项目初期遇到阻碍？",
@@ -255,6 +245,23 @@ export const zh = {
         g3_title: "法律架构与企业设立",
         g4_title: "进口许可证与海关合规",
         g5_title: "医疗与制药合规审查",
+        detail: {
+            for_who_title: "本指南适合哪些人？",
+            get_access_btn: "获取完整指南访问权",
+            what_you_get_title: "您将获得什么",
+            structures_title: "相关机构",
+            modal_title: "访问指南",
+            modal_desc: "请留下您的专业联系方式，我们的专家将立即通过电子邮件向您发送完整文件。",
+            modal_name_label: "全名",
+            modal_company_label: "公司名称",
+            modal_email_label: "专业电子邮件",
+            modal_email_placeholder: "john@company.com",
+            modal_phone_label: "电话",
+            modal_submit_loading: "发送中...",
+            modal_submit_idle: "下载安全 PDF",
+            modal_privacy: "您的数据受到完全保密处理。",
+            modal_success: "您的申请已被记录。指南将在几分钟内发送到您的电子邮件。",
+        }
     },
     veille: {
         badge: "法规监控",
@@ -305,9 +312,27 @@ export const zh = {
         action: "应对行动",
         delay: "预计周期",
         days: "天",
+        days_unit: "天",
         cta_title: "Agréa 负责您的合规事宜",
         cta_desc: "专家将在 4 小时内致电给您，并提供量身定制的路线图。",
-        cta_btn: "免费获得回电"
+        cta_btn: "免费获得回电",
+        impact: "影响力",
+        difficulty: "难度",
+        impact_levels: {
+            high: "高",
+            medium: "中",
+            low: "低"
+        },
+        difficulty_levels: {
+            easy: "简单",
+            medium: "中等",
+            hard: "复杂"
+        },
+        severity_labels: {
+            critical: "严重阻塞",
+            important: "重要",
+            optional: "次要"
+        }
     },
     mobile: {
         nav: {
@@ -345,6 +370,438 @@ export const zh = {
             generating: "生成中...",
             get_report: "获取我的报告",
             mandatory_fields: "这两个字段是个性化您的诊断所必需的。"
+        }
+    },
+    data_sectors: {
+        "creation-entreprise": {
+            "name": "公司注册与设立",
+            "description": "RCCM商事登记、全国统一识别码以及初始税务登记全流程。",
+            "objectives_list": [
+                "启动我的第一个创业项目",
+                "确保我当前的法律形式安全",
+                "在融资前使公司合规",
+                "避免与注册延迟相关的处罚",
+                "将我的机构转变为公司 (SARL/SA)"
+            ]
+        },
+        "btp": {
+            "name": "建筑与工程 (BTP)",
+            "description": "建筑许可申请、技术审批、环境影响评估报告与环境合规。",
+            "objectives_list": [
+                "启动新的房地产建筑工地",
+                "响应公共/私人招标",
+                "确保建筑许可证安全",
+                "确保环境合规 (ESIA)",
+                "获得更高类别的批准"
+            ]
+        },
+        "marches-publics": {
+            "name": "公共采购审批",
+            "description": "税务清关证明、ARMP证书、工商总局/社保登记及投标资质预审。",
+            "objectives_list": [
+                "更新我的税务和社保清关证明",
+                "获得 ARMP 合规证明",
+                "即刻提交投标 (紧急情况)",
+                "准备我的资格文件",
+                "遵守 ARSP (分包)"
+            ]
+        },
+        "import-export": {
+            "name": "进出口贸易",
+            "description": "进口许可证、原产地证明申请、进出口经营权及清关咨询。",
+            "objectives_list": [
+                "为被扣押的货物进行清关",
+                "获得我的永久进出口编号",
+                "准备当地产品的出口",
+                "申请海关免税",
+                "设立适当的许可证/授权"
+            ]
+        },
+        "sante": {
+            "name": "医疗与制药",
+            "description": "诊所设立审批、药房执照、药品注册及医疗执业许可。",
+            "objectives_list": [
+                "开设新的药房或诊所",
+                "推出新的医药产品/设备",
+                "获得我的执业授权",
+                "通过卫生部检查",
+                "更新我当前的医疗许可证"
+            ]
+        },
+        "transport": {
+            "name": "物流与运输",
+            "description": "公路及水运许可证、车队注册登记及专业驾驶人员资质办理。",
+            "objectives_list": [
+                "注册我的卡车/车队",
+                "开辟新的城际运输线路",
+                "获得我的内河/航空运输授权",
+                "更新驾驶员许可/授权",
+                "理顺我的车队保险合同"
+            ]
+        },
+        "mines": {
+            "name": "矿业开采",
+            "description": "探矿许可、手工采矿证、矿业开采环境及社会合规审查。",
+            "objectives_list": [
+                "启动新矿区的勘探",
+                "将我的研究许可转换为开采许可",
+                "准备环境和社会审计",
+                "出口商业矿产品",
+                "在 CAMI 更新我的授权"
+            ]
+        },
+        "telecoms": {
+            "name": "电信与媒体",
+            "description": "ARPTC认证、无线电频率申请、ISP网络服务执照及运营许可。",
+            "objectives_list": [
+                "获得互联网服务提供商 (ISP) 许可证",
+                "申请或更新广播频率",
+                "部署新基础设施 (天线、光纤)",
+                "确保我的设备符合 ARPTC 标准",
+                "启动视听媒体或 TNT 频道"
+            ]
+        },
+        "education": {
+            "name": "教育与培训",
+            "description": "初级/中级教育审批、私立学校设立、大学资质认证及职业培训中心审批。",
+            "objectives_list": [
+                "开设新的小学/中学",
+                "启动公认的专业培训中心",
+                "获得大学认证 (ESU 部)",
+                "理顺我的教职员工档案",
+                "批准新的学术课程模块"
+            ]
+        },
+        "agriculture": {
+            "name": "农业与畜牧业",
+            "description": "农业特许经营权申请、植物检疫证书及各类农业投入品许可。",
+            "objectives_list": [
+                "确保我的农业土地租让权安全",
+                "进口种子、肥料或专业投入品",
+                "出口我的农产品 (咖啡、可可等)",
+                "申请我的国家植物检疫证书",
+                "寻求定向资金或补贴"
+            ]
+        },
+        "securite": {
+            "name": "私人安保业务",
+            "description": "安保公司营业许可、佩戴武器许可、通讯设备及安防监控资质。",
+            "objectives_list": [
+                "创建一个新的安保机构",
+                "申请进口安全设备的授权",
+                "获得监管规定的佩戴武器授权",
+                "在内政部更新批准",
+                "赢得基础设施安全的公共招标"
+            ]
+        },
+        "finance": {
+            "name": "金融与保险",
+            "description": "中央银行(BCC)牌照申请、ARCA核准、跨境转账、小额贷款及保险经纪牌照。",
+            "objectives_list": [
+                "申请官方中央银行 (BCC) 批准",
+                "启动小额信贷结构或移动支付",
+                "获得监管机构对经纪人/保险人的批准 (ARCA)",
+                "验证我的反洗钱程序的合规性",
+                "从机构投资者处筹集成倍的认证资金"
+            ]
+        }
+    },
+    data_objectives: {
+        "permis-construire": {
+            "name": "建筑许可证",
+            "label": "建筑许可证",
+            "description": "在开始任何建筑工程之前必须获得的行政授权。"
+        },
+        "agrement-btp": {
+            "name": "BTP 批准",
+            "label": "BTP 承包商批准",
+            "description": "响应公共建筑合同时必须获得的证明。"
+        },
+        "eie": {
+            "name": "环境影响研究",
+            "label": "环境影响研究 (EIS)",
+            "description": "对于投资额超过 50,000 美元的任何项目均为强制性。"
+        },
+        "certificat-conformite-btp": {
+            "name": "技术合规证明",
+            "label": "技术合规证明",
+            "description": "用于建筑中的进口材料所需。"
+        },
+        "dossier-soumission": {
+            "name": "提交文件",
+            "label": "投标文件的组成",
+            "description": "响应公共招标所需的 15 至 25 份文件集。"
+        },
+        "attestation-fiscale": {
+            "name": "DGI 完税证明",
+            "label": "完税证明 (DGI)",
+            "description": "证明公司在税务总局信誉良好的证明。"
+        },
+        "attestation-cnss": {
+            "name": "CNSS 证明",
+            "label": "CNSS 信誉良好证明",
+            "description": "向国家社会保障基金缴纳社会保障缴款的证明。"
+        },
+        "immatriculation-rccm": {
+            "name": "RCCM 注册",
+            "label": "商业登记注册 (RCCM)",
+            "description": "公司在商业登记处必须进行的注册。"
+        },
+        "numero-nif": {
+            "name": "税务识别码",
+            "label": "税务识别码 (NIF)",
+            "description": "由税务总局分配的唯一税务标识符。"
+        },
+        "numero-inss": {
+            "name": "INSS 隶属关系",
+            "label": "INSS 隶属关系 (雇主)",
+            "description": "公司在社会保障机构注册为雇主。"
+        },
+        "licence-importation": {
+            "name": "进口许可证",
+            "label": "进口许可证",
+            "description": "由商务部颁发的进口货物授权。"
+        },
+        "certificat-conformite-import": {
+            "name": "合规证明",
+            "label": "进口合规证明",
+            "description": "进口产品符合刚果技术标准的证明。"
+        },
+        "regime-douanier": {
+            "name": "海关制度",
+            "label": "海关制度和清关",
+            "description": "在海关总署 (DGDA) 进行的清关程序。"
+        },
+        "pharmacie-autorisation": {
+            "name": "药房 — 开业授权",
+            "label": "药房开业授权",
+            "description": "由卫生部颁发的药房经营授权。"
+        },
+        "clinique-agrement": {
+            "name": "诊所 — 批准",
+            "label": "医疗机构批准",
+            "description": "批准私人诊所所需的 30 多份文件。"
+        },
+        "ecole-homologation": {
+            "name": "学校 — 认证",
+            "label": "私立学校认证",
+            "description": "符合 EPST 部 2024 年教育机构标准。"
+        },
+        "permis-recherche-miniere": {
+            "name": "矿业研究许可",
+            "label": "矿业研究许可 (CAMI)",
+            "description": "由矿业地籍局颁发的勘探授权。"
+        },
+        "droits-exploitation": {
+            "name": "开采权",
+            "label": "矿业开采权",
+            "description": "与矿业部谈判并获得开采权。"
+        },
+        "conformite-code-minier": {
+            "name": "2018 年矿业法合规性",
+            "label": "符合 2018 年修订版矿业法的合规审计",
+            "description": "使其符合 2018 年修订的大刚果矿业法的新规定。"
+        }
+    },
+    data_documents: {
+        "pc-01": {
+            "name": "建筑许可申请表",
+            "description": "可从市政府或市政厅获得的官方表格。",
+            "source": "市政厅 / 市政府",
+            "tip": "填写 3 份，由所有者签名并盖章。"
+        },
+        "pc-02": {
+            "name": "土地现状图 (分幅图)",
+            "description": "在城市结构中精确精确定位地块的平面图。",
+            "source": "分幅服务 - 城市部门"
+        },
+        "pc-03": {
+            "name": "所有权证书或租赁协议",
+            "description": "占用该地块权利的法律证明。",
+            "tip": "若是租赁：期限至少 25 年才能获得许可。"
+        },
+        "pc-04": {
+            "name": "经认证建筑师批准的建筑图纸",
+            "description": "由建筑师协会成员建筑师编制并签名的总平面图、立面图和剖面图。",
+            "source": "刚果建筑师协会"
+        },
+        "pc-05": {
+            "name": "结构计算说明书",
+            "description": "证明结构强度的计算书，由土木工程师编制。"
+        },
+        "pc-06": {
+            "name": "申请人身份证复印件",
+            "description": "项目业主的国民身份证或护照。"
+        },
+        "pc-07": {
+            "name": "缴纳市政税证明",
+            "description": "缴纳申请登记费的收据。"
+        },
+        "pc-08": {
+            "name": "利弊调查 (如有必要)",
+            "description": "大规模建设所需的邻里咨询。",
+            "tip": "仅对 4 层以上的建筑物有要求。"
+        },
+        "abtp-01": {
+            "name": "BTP 批准申请表",
+            "description": "基础设施和公共工程部的官方表格。",
+            "source": "ITP 部"
+        },
+        "abtp-02": {
+            "name": "经认证的公司章程",
+            "description": "经公证人认证的公司成立法案。"
+        },
+        "abtp-03": {
+            "name": "商业登记摘录 (RCCM)",
+            "description": "证明公司法律存在的近期摘录 (少于 3 个月)。"
+        },
+        "abtp-04": {
+            "name": "有效的 DGI 完税证明",
+            "description": "由税务总局颁发的完税证明。",
+            "source": "DGI"
+        },
+        "abtp-05": {
+            "name": "最新的 CNSS 证明",
+            "description": "缴纳社会保障缴款的证明。",
+            "source": "CNSS"
+        },
+        "abtp-06": {
+            "name": "合格技术人员名单",
+            "description": "公司雇用的工程师和技术员的简历和文凭。",
+            "tip": "最低级别类别至少需要 1 名土木工程师。"
+        },
+        "abtp-07": {
+            "name": "以往项目完成证明",
+            "description": "至少 3 个以往工地良好执行的证明。"
+        },
+        "abtp-08": {
+            "name": "上一财年经认证的资产负债表",
+            "description": "由注册会计师认证的会计资产负债表。"
+        },
+        "eie-01": {
+            "name": "环境评估申请表",
+            "description": "环境和可持续发展部的官方表格。",
+            "source": "MEDD 部"
+        },
+        "eie-02": {
+            "name": "详细项目描述",
+            "description": "项目的完整说明备忘录：性质、地点、面积、持续时间。"
+        },
+        "eie-03": {
+            "name": "环境和社会管理计划",
+            "description": "描述针对已识别影响的缓解措施的文件。"
+        },
+        "eie-04": {
+            "name": "环境影响研究报告",
+            "description": "由认证环境专家编制的报告。",
+            "tip": "必须由 MEDD 批准名单上的专家编制。"
+        },
+        "eie-05": {
+            "name": "公众咨询结果",
+            "description": "与周边人群咨询会议的会议记录。"
+        },
+        "mp-01": {
+            "name": "填写完整并签名的提交表",
+            "description": "招标文件中提供的表格 (DAO)。"
+        },
+        "mp-02": {
+            "name": "近期 RCCM 摘录 (少于 3 个月)",
+            "description": "公司法律存在和经营范围的证明。",
+            "source": "商事法院"
+        },
+        "mp-03": {
+            "name": "DGI 完税证明",
+            "description": "税务合规证明，有效期 3 个月。",
+            "source": "税务总局"
+        },
+        "mp-04": {
+            "name": "最新的 CNSS 证明",
+            "description": "社会合规证明，有效期 3 个月。",
+            "source": "CNSS"
+        },
+        "mp-05": {
+            "name": "雇主 INSS 证明",
+            "description": "公司隶属于 INSS 的证明。",
+            "source": "INSS"
+        },
+        "mp-06": {
+            "name": "投标保证金 (银行担保)",
+            "description": "代表合同预估金额 2% 至 3% 的银行担保。",
+            "tip": "签发延迟：根据银行不同，需要 3 至 7 个工作日。"
+        },
+        "mp-07": {
+            "name": "详细技术建议书",
+            "description": "执行方法论、进度表、人力和物力资源。"
+        },
+        "mp-08": {
+            "name": "财务报价 (放在单独信封中)",
+            "description": "详细报价和工程量清单。",
+            "tip": "放在单独且密封的信封中提交。"
+        },
+        "mp-09": {
+            "name": "以前合同良好执行证明",
+            "description": "至少 3 份类似合同的证明。"
+        },
+        "mp-10": {
+            "name": "最近 3 个财年经认证的资产负债表",
+            "description": "由注册会计师认证的财务报表。"
+        },
+        "rccm-01": {
+            "name": "经公证的公司章程",
+            "description": "由认证公证人起草并认证的公司成立法案。"
+        },
+        "rccm-02": {
+            "name": "注册申报单",
+            "description": "可从商事法院登记官处获得的表格。",
+            "source": "商事法院"
+        },
+        "rccm-03": {
+            "name": "合伙人身份文件副本",
+            "description": "每个合伙人和经理的身份证或护照。"
+        },
+        "rccm-04": {
+            "name": "总部证明",
+            "description": "商业场所的租赁合同或所有权证书。"
+        },
+        "rccm-05": {
+            "name": "股本认缴证明",
+            "description": "证明出资已存入的银行证明或公证证明。"
+        },
+        "ph-01": {
+            "name": "经认证的药剂师文凭",
+            "description": "由刚果药剂师协会认可的文凭。",
+            "source": "药剂师协会 / MINSANTE"
+        },
+        "ph-02": {
+            "name": "国籍证明或居留许可",
+            "description": "对于外国药剂师：卫生部颁发的执业授权。"
+        },
+        "ph-03": {
+            "name": "经卫生工程师批准的场所平面图",
+            "description": "符合 MINSANTE 空间标准的药房建筑图纸。",
+            "source": "卫生工程 / MINSANTE"
+        },
+        "ph-04": {
+            "name": "现有药品设备清单",
+            "description": "药房设备和家具的完整清单。"
+        },
+        "ph-05": {
+            "name": "场所租赁合同 (至少 5 年)",
+            "description": "期限至少为 5 年的商业租赁。",
+            "tip": "租赁期限在检查期间会进行核实。"
+        },
+        "ph-06": {
+            "name": "药房 RCCM",
+            "description": "药房的商业登记。"
+        },
+        "ph-07": {
+            "name": "药房 NIF",
+            "description": "该机构的税务识别码。"
+        },
+        "ph-08": {
+            "name": "事先检查报告",
+            "description": "由省级药品检查员在实地考察后编制的报告。",
+            "tip": "在申请检查和实际访问之间预留 2 至 3 个月。"
         }
     }
 };

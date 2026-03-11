@@ -2,200 +2,315 @@
 
 import { useState } from "react";
 import { Download } from "lucide-react";
+import { ScoringResult, DiagnosticData } from "@/lib/scoring";
 import { Objective } from "@/data/objectives";
 import { Sector } from "@/data/sectors";
 import { RequiredDocument } from "@/data/documents";
 import { useTranslation } from "@/lib/i18n";
 
 interface Props {
-    objective: Objective;
-    sector: Sector;
-    documents: RequiredDocument[];
+    result?: ScoringResult;
+    data?: DiagnosticData;
+    objective?: Objective;
+    sector?: Sector;
+    documents?: RequiredDocument[];
 }
 
-export default function PdfDownloadButton({ objective, sector, documents }: Props) {
+export default function PdfDownloadButton({ result, data, objective, sector, documents }: Props) {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
 
     const handleDownload = async () => {
         setLoading(true);
         try {
+            // -- 1. API Call (Log / Sauvegarde BDD) --
+            await fetch("/api/reports", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    diagnosticData: data,
+                    scoringResult: result,
+                    source: "pdf_download",
+                }),
+            }).catch((err) => console.log("Sauvegarde rapport échouée", err));
+
+            // -- 2. Génération PDF Premium --
             const { jsPDF } = await import("jspdf");
             const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
 
-            const GREEN = [13, 92, 58] as [number, number, number];
-            const BLACK = [10, 10, 10] as [number, number, number];
-            const GRAY = [82, 82, 82] as [number, number, number];
-            const LIGHT = [244, 244, 245] as [number, number, number];
+            // Design Tokens
+            const GREEN_DARK = [13, 92, 58] as [number, number, number];
+            const GREEN_MED = [22, 163, 74] as [number, number, number];
+            const GREEN_LIGHT = [240, 253, 244] as [number, number, number];
+            const BLACK = [15, 23, 42] as [number, number, number];
+            const GRAY_DARK = [71, 85, 105] as [number, number, number];
+            const GRAY_MED = [100, 116, 139] as [number, number, number];
+            const GRAY_LIGHT = [248, 250, 252] as [number, number, number];
+            const WHITE = [255, 255, 255] as [number, number, number];
 
-            let y = 20;
-            const margin = 20;
+            const margin = 25;
             const pageWidth = 210;
             const contentWidth = pageWidth - margin * 2;
 
-            // Header band
-            doc.setFillColor(...GREEN);
-            doc.rect(0, 0, pageWidth, 14, "F");
+            const isAudit = !!result && !!data;
+            const companyNameLabel = isAudit ? (data?.companyName || "Non spécifié") : "Guide de Conformité";
+            const sectorLabel = isAudit ? data?.sector : sector?.name;
+            const mainTitle = isAudit ? "RAPPORT D'AUDIT" : "GUIDE SÉCURISÉ";
+            const subTitleLabel = isAudit ? "DE CONFORMITÉ" : (objective?.label || "");
 
-            // Logo text
+            // =========================================================
+            // PAGE 1: COVER PAGE
+            // =========================================================
+            doc.setFillColor(...GREEN_DARK);
+            doc.rect(0, 0, pageWidth, 297, "F"); // Full dark green background
+
+            let currentY = 100;
+
+            doc.setTextColor(...GREEN_MED);
+            doc.setFontSize(20);
+            doc.setFont("helvetica", "bold");
+            doc.text("agréa.", margin, currentY);
+            currentY += 20;
+
+            doc.setTextColor(...WHITE);
+            doc.setFontSize(42);
+            doc.text(mainTitle, margin, currentY);
+            currentY += 15;
+            doc.setFontSize(36);
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(11);
-            doc.setFont("helvetica", "bold");
-            doc.text(t("pdf.header") || "AGRÉA AFRICA", margin, 9.5);
+            doc.text(subTitleLabel, margin, currentY);
+            currentY += 40;
 
+            doc.setFontSize(14);
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
-            doc.text(t("pdf.website") || "agrea.africa", pageWidth - margin, 9.5, { align: "right" });
-
-            y = 30;
-
-            // Title
-            doc.setTextColor(...BLACK);
-            doc.setFontSize(18);
+            doc.setTextColor(200, 200, 200);
+            doc.text("ÉTABLI POUR", margin, currentY);
+            currentY += 8;
+            doc.setTextColor(...WHITE);
             doc.setFont("helvetica", "bold");
-            doc.text(objective.label, margin, y, { maxWidth: contentWidth });
-            y += 10;
+            doc.text(companyNameLabel, margin, currentY);
+            currentY += 20;
 
-            // Subtitle
-            doc.setTextColor(...GRAY);
-            doc.setFontSize(9);
+            doc.setFontSize(14);
             doc.setFont("helvetica", "normal");
-            doc.text(`${t("pdf.sector") || "Secteur :"} ${sector.name}`, margin, y);
-            y += 6;
-            doc.text(`${t("pdf.generated_on") || "Document généré le"} ${new Date().toLocaleDateString(t("pdf.locale") || "fr-FR", { day: "numeric", month: "long", year: "numeric" })}`, margin, y);
-            y += 5;
-
-            // Info boxes
-            doc.setFillColor(...LIGHT);
-            doc.roundedRect(margin, y, contentWidth / 2 - 4, 14, 2, 2, "F");
-            doc.setTextColor(...GRAY);
-            doc.setFontSize(7);
-            doc.text(t("pdf.est_delay") || "DÉLAI ESTIMÉ", margin + 4, y + 5);
-            doc.setTextColor(...BLACK);
-            doc.setFontSize(10);
+            doc.setTextColor(200, 200, 200);
+            doc.text("SECTEUR D'ACTIVITÉ", margin, currentY);
+            currentY += 8;
+            doc.setTextColor(...WHITE);
             doc.setFont("helvetica", "bold");
-            doc.text(`${objective.daysMin} – ${objective.daysMax} ${t("pdf.days") || "jours"}`, margin + 4, y + 11);
+            doc.text(sectorLabel || "Secteur", margin, currentY);
+            currentY += 20;
 
-            const box2x = margin + contentWidth / 2 + 4;
-            doc.setFillColor(...LIGHT);
-            doc.roundedRect(box2x, y, contentWidth / 2 - 4, 14, 2, 2, "F");
-            doc.setTextColor(...GRAY);
-            doc.setFontSize(7);
+            doc.setFontSize(14);
             doc.setFont("helvetica", "normal");
-            doc.text(t("pdf.official_cost") || "COÛT OFFICIEL", box2x + 4, y + 5);
-            doc.setTextColor(...BLACK);
-            doc.setFontSize(10);
+            doc.setTextColor(200, 200, 200);
+            doc.text("DATE", margin, currentY);
+            currentY += 8;
+            doc.setTextColor(...WHITE);
             doc.setFont("helvetica", "bold");
-            const costText = objective.costMin === 0
-                ? (t("pdf.official_fees") || "Frais officiels")
-                : `${objective.costMin.toLocaleString()} – ${objective.costMax.toLocaleString()} USD`;
-            doc.text(costText, box2x + 4, y + 11);
+            doc.text(new Date().toLocaleDateString('fr-FR'), margin, currentY);
 
-            y += 22;
+            // =========================================================
+            // PAGE 2: EXECUTIVE SUMMARY
+            // =========================================================
+            doc.addPage();
+            currentY = 30;
 
-            // Divider
-            doc.setDrawColor(...(LIGHT as [number, number, number]));
-            doc.setLineWidth(0.3);
-            doc.line(margin, y, pageWidth - margin, y);
-            y += 8;
-
-            // Required docs
-            const required = documents.filter((d) => d.isRequired);
-            const optional = documents.filter((d) => !d.isRequired);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.setTextColor(...BLACK);
-            doc.text(`${t("pdf.mandatory_docs") || "Documents obligatoires"} (${required.length})`, margin, y);
-            y += 8;
-
-            required.forEach((d, idx) => {
-                if (y > 265) {
-                    doc.addPage();
-                    y = 20;
-                }
-
-                // Bullet
-                doc.setFillColor(...GREEN);
-                doc.circle(margin + 3, y - 1.5, 1.5, "F");
-
+            if (isAudit) {
+                doc.setFontSize(28);
+                doc.setTextColor(...BLACK);
                 doc.setFont("helvetica", "bold");
+                doc.text("Synthèse Executive", margin, currentY);
+                currentY += 20;
+
+                // Client Info Grid
+                doc.setFillColor(...GRAY_LIGHT);
+                doc.roundedRect(margin, currentY, contentWidth, 40, 2, 2, "F");
+                
                 doc.setFontSize(10);
-                doc.setTextColor(...BLACK);
-                const nameLines = doc.splitTextToSize(`${idx + 1}. ${d.name}`, contentWidth - 12);
-                doc.text(nameLines, margin + 8, y);
-                y += nameLines.length * 5;
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(8.5);
-                doc.setTextColor(...GRAY);
-                const descLines = doc.splitTextToSize(d.description, contentWidth - 12);
-                doc.text(descLines, margin + 8, y);
-                y += descLines.length * 4.5;
-
-                if (d.source) {
-                    doc.setFontSize(7.5);
-                    doc.setTextColor(13, 92, 58);
-                    doc.text(`${t("pdf.source") || "Source :"} ${d.source}`, margin + 8, y);
-                    y += 4;
-                }
-
-                if (d.tip) {
-                    doc.setFontSize(7.5);
-                    doc.setTextColor(13, 92, 58);
-                    const tipLines = doc.splitTextToSize(`${t("pdf.tip") || "Conseil :"} ${d.tip}`, contentWidth - 12);
-                    doc.text(tipLines, margin + 8, y);
-                    y += tipLines.length * 4;
-                }
-
-                y += 4;
-            });
-
-            if (optional.length > 0) {
-                y += 4;
+                doc.setTextColor(...GRAY_MED);
                 doc.setFont("helvetica", "bold");
-                doc.setFontSize(11);
+                doc.text("CONTACT", margin + 10, currentY + 10);
+                doc.text("TÉLÉPHONE", margin + 80, currentY + 10);
+                
                 doc.setTextColor(...BLACK);
-                doc.text(`${t("pdf.additional_docs") || "Documents complémentaires"} (${optional.length})`, margin, y);
-                y += 8;
+                doc.setFontSize(12);
+                doc.text(data?.contactName || "N/A", margin + 10, currentY + 17);
+                doc.text(data?.contactPhone || "N/A", margin + 80, currentY + 17);
 
-                optional.forEach((d, idx) => {
-                    if (y > 265) {
-                        doc.addPage();
-                        y = 20;
-                    }
+                doc.setFontSize(10);
+                doc.setTextColor(...GRAY_MED);
+                doc.text("TYPE SOCIÉTÉ", margin + 10, currentY + 28);
+                doc.text("VILLE", margin + 80, currentY + 28);
+
+                doc.setTextColor(...BLACK);
+                doc.setFontSize(12);
+                doc.text(data?.companyType?.toUpperCase() || "N/A", margin + 10, currentY + 35);
+                doc.text(data?.city || "N/A", margin + 80, currentY + 35);
+                
+                currentY += 60;
+
+                // Score Graphic
+                doc.setFillColor(...WHITE);
+                doc.setDrawColor(...GRAY_LIGHT);
+                doc.setLineWidth(1);
+                doc.roundedRect(margin, currentY, contentWidth, 50, 3, 3, "FD");
+
+                doc.setFontSize(12);
+                doc.setTextColor(...GRAY_DARK);
+                doc.setFont("helvetica", "bold");
+                doc.text("SCORE DE CONFORMITÉ GLOBAL", margin + 15, currentY + 15);
+                
+                const score = result?.score || 0;
+                let color = [220, 38, 38]; // Red
+                if (score > 40) color = [217, 119, 6]; // Yellow
+                if (score > 75) color = GREEN_MED; // Green
+
+                doc.setFontSize(48);
+                doc.setTextColor(color[0], color[1], color[2]);
+                doc.text(`${score}`, margin + 15, currentY + 40);
+                
+                doc.setFontSize(14);
+                doc.setTextColor(...GRAY_MED);
+                doc.text("/ 100", margin + 18 + doc.getTextWidth(`${score}`), currentY + 40);
+
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                const gapCount = result?.gaps?.length || 0;
+                doc.text(`Identifié : ${gapCount} actions requises pour atteindre la conformité totale.`, margin + 15 + doc.getTextWidth(`${score} / 100`) + 20, currentY + 36);
+
+                currentY += 70;
+
+                // Strengths
+                if (result?.strengths && result.strengths.length > 0) {
+                    doc.setFontSize(16);
+                    doc.setTextColor(...BLACK);
                     doc.setFont("helvetica", "bold");
-                    doc.setFontSize(9.5);
-                    doc.setTextColor(...GRAY);
-                    const nameLines = doc.splitTextToSize(`${idx + 1}. ${d.name}`, contentWidth - 8);
-                    doc.text(nameLines, margin + 4, y);
-                    y += nameLines.length * 4.5;
-
+                    doc.text("Documents Validés", margin, currentY);
+                    currentY += 10;
+                    
+                    doc.setFillColor(...GREEN_LIGHT);
+                    doc.roundedRect(margin, currentY, contentWidth, 10 + (result.strengths.length * 8), 2, 2, "F");
+                    
                     doc.setFont("helvetica", "normal");
-                    doc.setFontSize(8);
-                    const descLines = doc.splitTextToSize(d.description, contentWidth - 8);
-                    doc.text(descLines, margin + 4, y);
-                    y += descLines.length * 4 + 4;
+                    doc.setFontSize(10);
+                    doc.setTextColor(...GREEN_DARK);
+                    result.strengths.forEach((strength, i) => {
+                        doc.text(`✓ ${strength}`, margin + 8, currentY + 12 + (i * 7));
+                    });
+                    currentY += 10 + (result.strengths.length * 8) + 15;
+                }
+
+                // =========================================================
+                // PAGE 3+: ACTION PLAN (AUDIT ONLY)
+                // =========================================================
+                doc.addPage();
+                currentY = 30;
+                doc.setFontSize(28);
+                doc.setTextColor(...BLACK);
+                doc.setFont("helvetica", "bold");
+                doc.text("Plan d'Action Détaillé", margin, currentY);
+                currentY += 20;
+
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(...GRAY_DARK);
+                doc.text("Les étapes ci-dessous sont classées par ordre de priorité selon la réglementation.", margin, currentY);
+                currentY += 15;
+
+                result?.gaps?.forEach((gap, index) => {
+                    if (currentY > 240) { doc.addPage(); currentY = 30; }
+                    doc.setFillColor(...WHITE);
+                    doc.setDrawColor(...GRAY_LIGHT);
+                    doc.setLineWidth(0.5);
+                    doc.roundedRect(margin, currentY, contentWidth, 50, 2, 2, "FD");
+                    
+                    const severityColor = gap.severity === 'critical' ? [220, 38, 38] : gap.severity === 'important' ? [217, 119, 6] : [22, 163, 74];
+                    doc.setFillColor(...(severityColor as [number, number, number]));
+                    doc.roundedRect(margin + contentWidth - 30, currentY + 5, 25, 6, 1, 1, "F");
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(7);
+                    doc.setFont("helvetica", "bold");
+                    const sevLabel = gap.severity === 'critical' ? 'BLOQUANT' : gap.severity === 'important' ? 'MAJEUR' : 'MINEUR';
+                    doc.text(sevLabel, margin + contentWidth - 17.5, currentY + 9, { align: "center" });
+                    
+                    doc.setTextColor(...BLACK);
+                    doc.setFontSize(14);
+                    doc.text(`${index + 1}. ${gap.title}`, margin + 8, currentY + 12);
+                    
+                    doc.setFontSize(10);
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(...GRAY_DARK);
+                    const splitDesc = doc.splitTextToSize(gap.description, contentWidth - 16);
+                    doc.text(splitDesc, margin + 8, currentY + 22);
+                    
+                    const actionY = currentY + 24 + (splitDesc.length * 4);
+                    doc.setFillColor(...GRAY_LIGHT);
+                    doc.rect(margin + 5, actionY, contentWidth - 10, 12, "F");
+                    doc.setTextColor(...BLACK);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(`Action : ${gap.action}`, margin + 8, actionY + 8);
+                    
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(9);
+                    doc.text(`Délai estimé : ${gap.estimatedDays} jours`, margin + 8, currentY + 46);
+                    if (gap.estimatedCostUsd > 0) {
+                        doc.text(`Frais off. estimatifs : ${gap.estimatedCostUsd.toLocaleString()} USD`, margin + 60, currentY + 46);
+                    }
+                    currentY += 58;
+                });
+            } else {
+                // GUIDE MODE: Documents list (Not an audit)
+                doc.setFontSize(28);
+                doc.setTextColor(...BLACK);
+                doc.setFont("helvetica", "bold");
+                doc.text("Documents Requis", margin, currentY);
+                currentY += 20;
+
+                documents?.forEach((d, index) => {
+                    if (currentY > 250) { doc.addPage(); currentY = 30; }
+                    doc.setFillColor(...WHITE);
+                    doc.setDrawColor(...GRAY_LIGHT);
+                    doc.roundedRect(margin, currentY, contentWidth, 40, 2, 2, "FD");
+
+                    const docColor = d.isRequired ? [220, 38, 38] : GREEN_MED;
+                    doc.setFillColor(docColor[0], docColor[1], docColor[2]);
+                    doc.roundedRect(margin + 8, currentY + 5, 25, 5, 1, 1, "F");
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(7);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(d.isRequired ? "OBLIGATOIRE" : "RECOMMANDÉ", margin + 20.5, currentY + 8.5, { align: "center" });
+
+                    doc.setTextColor(...BLACK);
+                    doc.setFontSize(12);
+                    doc.text(`${index + 1}. ${d.name}`, margin + 8, currentY + 18);
+
+                    doc.setTextColor(...GRAY_MED);
+                    doc.setFontSize(10);
+                    doc.setFont("helvetica", "normal");
+                    const splitDesc = doc.splitTextToSize(d.description, contentWidth - 16);
+                    doc.text(splitDesc, margin + 8, currentY + 25);
+
+                    currentY += 45;
                 });
             }
 
-            // Footer
-            const pageCount = (doc as InstanceType<typeof jsPDF> & { internal: { getNumberOfPages: () => number } }).internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
+            // Footer for all pages (except cover)
+            const totalPages = (doc as any).internal.getNumberOfPages();
+            for (let i = 2; i <= totalPages; i++) {
                 doc.setPage(i);
-                doc.setFillColor(...GREEN);
-                doc.rect(0, 290, pageWidth, 7, "F");
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(6.5);
+                doc.setFontSize(8);
+                doc.setTextColor(...GRAY_MED);
                 doc.setFont("helvetica", "normal");
-                doc.text(`${t("pdf.header") || "AGRÉA AFRICA"} — ${t("pdf.website") || "agrea.africa"} — ${t("pdf.footer_note") || "Cette liste est fournie à titre indicatif. Les exigences officielles peuvent évoluer."}`, margin, 295);
-                doc.text(`${t("pdf.page") || "Page"} ${i} / ${pageCount}`, pageWidth - margin, 295, { align: "right" });
+                doc.text(`Page ${i - 1} sur ${totalPages - 1}`, pageWidth - margin, 285, { align: "right" });
+                doc.text(`Document confidentiel Agréa Africa — Généré le ${new Date().toLocaleDateString('fr-FR')}`, margin, 285);
             }
 
-            const filename = `Agrea_${objective.id}_${new Date().toISOString().slice(0, 10)}.pdf`;
-            doc.save(filename);
+            const fileName = isAudit ? `Audit_Agréa_${data?.companyName || 'Export'}` : `Guide_Agréa_${objective?.label || 'Export'}`;
+            doc.save(`${fileName}.pdf`);
+
         } catch (err) {
-            console.error("Erreur génération PDF :", err);
+            console.error("PDF Error:", err);
         } finally {
             setLoading(false);
         }
@@ -206,10 +321,21 @@ export default function PdfDownloadButton({ objective, sector, documents }: Prop
             onClick={handleDownload}
             disabled={loading}
             className="btn-primary"
-            style={{ opacity: loading ? 0.7 : 1, cursor: loading ? "wait" : "pointer" }}
+            style={{
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? "wait" : "pointer",
+                padding: "12px 24px",
+                borderRadius: "12px",
+                fontSize: "15px",
+                fontWeight: 600,
+                boxShadow: "0 4px 15px rgba(13, 92, 58, 0.2)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px"
+            }}
         >
-            <Download size={16} />
-            {loading ? (t("pdf.generating") || "Génération en cours...") : (t("pdf.download") || "Télécharger la liste PDF")}
+            <Download size={18} />
+            {loading ? t("pdf.generating") : t("pdf.download")}
         </button>
     );
 }

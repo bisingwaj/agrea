@@ -3,56 +3,48 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, AlertTriangle, CheckCircle, XCircle, Download, ArrowLeft } from "lucide-react";
-import { ScoringResult, DiagnosticData } from "@/lib/scoring";
+import { ArrowRight, AlertTriangle, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
+import { ScoringResult, DiagnosticData, ComplianceGap } from "@/lib/scoring";
 import { useTranslation } from "@/lib/i18n";
+import { FadeUp } from "@/components/animations/FadeUp";
+import PdfDownloadButton from "@/components/result/PdfDownloadButton";
+import { RadarChart, RadarAxis } from "@/components/ui/RadarChart";
+import { AcronymTooltip } from "@/components/ui/AcronymTooltip";
 
 interface StoredData {
     form: DiagnosticData;
     result: ScoringResult;
 }
 
-function ScoreGauge({ score }: { score: number }) {
-    const radius = 72;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (score / 100) * circumference;
+/** Calcule les 4 axes du radar depuis les résultats de conformité */
+function buildRadarAxes(result: ScoringResult, sector: string): RadarAxis[] {
+    const gaps = result.gaps;
+    const criticalGaps = gaps.filter(g => g.severity === "critical").length;
+    const importantGaps = gaps.filter(g => g.severity === "important").length;
+    const totalGaps = gaps.length;
 
-    const color =
-        score >= 85 ? "#0D5C3A" : score >= 65 ? "#16A34A" : score >= 35 ? "#D97706" : "#DC2626";
+    // Admin : gap ids liés à RCCM, NIF, INSS, CNSS
+    const adminIds = ["rccm", "nif", "inss", "cnss", "attestation", "journal"];
+    const adminGaps = gaps.filter(g => adminIds.some(k => g.id.includes(k))).length;
+    const administrative = Math.max(0, Math.min(100, 100 - adminGaps * 25 - criticalGaps * 3));
 
-    return (
-        <div style={{ position: "relative", width: "180px", height: "180px" }}>
-            <svg width="180" height="180" viewBox="0 0 180 180" style={{ transform: "rotate(-90deg)" }}>
-                <circle cx="90" cy="90" r={radius} fill="none" stroke="rgba(0,0,0,0.05)" strokeWidth="12" />
-                <circle
-                    cx="90"
-                    cy="90"
-                    r={radius}
-                    fill="none"
-                    stroke={color}
-                    strokeWidth="12"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                    style={{ transition: "stroke-dashoffset 1s ease" }}
-                />
-            </svg>
-            <div
-                style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    textAlign: "center",
-                }}
-            >
-                <p style={{ fontSize: "36px", fontWeight: 700, color: "var(--gray-950)", lineHeight: 1, letterSpacing: "-0.03em" }}>
-                    {score}
-                </p>
-                <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>/ 100</p>
-            </div>
-        </div>
-    );
+    // Fiscal : gap ids liés à TVA, impôt, DGI
+    const fiscalIds = ["tva", "dgi", "fiscal", "impot", "patente", "taxe"];
+    const fiscalGaps = gaps.filter(g => fiscalIds.some(k => g.id.includes(k))).length;
+    const fiscal = Math.max(0, Math.min(100, 100 - fiscalGaps * 30 - criticalGaps * 2));
+
+    // Sectoriel : calé sur le score global
+    const sectoriel = Math.min(100, Math.max(0, result.score - criticalGaps * 8 + importantGaps * 2));
+
+    // Juridique : force + atouts
+    const juridique = Math.min(100, Math.round(result.score * 0.9 + result.strengths.length * 4));
+
+    return [
+        { label: "Admin.", value: Math.round(administrative) },
+        { label: "Fiscal", value: Math.round(fiscal) },
+        { label: "Sectoriel", value: Math.round(sectoriel) },
+        { label: "Juridique", value: Math.round(juridique) },
+    ];
 }
 
 export default function ReportPage() {
@@ -156,7 +148,16 @@ export default function ReportPage() {
                     marginBottom: "32px",
                 }}
             >
-                <ScoreGauge score={result.score} />
+                {/* ------ Radar Chart ------ */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                <RadarChart axes={buildRadarAxes(result, form.sector)} size={220} animated />
+                <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: "36px", fontWeight: 800, color: "var(--gray-950)", lineHeight: 1, letterSpacing: "-0.04em", marginBottom: "2px" }}>
+                        {result.score}
+                    </p>
+                    <p style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 500 }}>/ 100</p>
+                </div>
+            </div>
 
                 <div style={{ flex: 1, minWidth: "200px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
@@ -175,7 +176,7 @@ export default function ReportPage() {
                                     : t("report.feedback.non")}
                     </p>
 
-                    <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", marginBottom: "24px" }}>
                         <div>
                             <p style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "2px" }}>{t("report.strengths")}</p>
                             <p style={{ fontWeight: 600, color: "var(--gray-950)", fontSize: "18px" }}>{result.strengths.length}</p>
@@ -193,6 +194,7 @@ export default function ReportPage() {
                             </div>
                         )}
                     </div>
+                    <PdfDownloadButton result={result} data={form} />
                 </div>
             </div>
 
@@ -225,45 +227,61 @@ export default function ReportPage() {
             {/* Gaps */}
             {result.gaps.length > 0 && (
                 <div style={{ marginBottom: "40px" }}>
-                    <h2 style={{ fontSize: "1.25rem", marginBottom: "16px" }}>{t("report.action_plan")}</h2>
+                    <FadeUp delay={0.4}>
+                        <h2 style={{ fontSize: "1.25rem", marginBottom: "16px" }}>{t("report.action_plan")}</h2>
+                    </FadeUp>
                     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                         {result.gaps.map((gap, i) => (
-                            <div
-                                key={gap.id}
-                                style={{
-                                    padding: "20px 20px",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "12px",
-                                    background: "white",
-                                    borderLeft: `4px solid ${SEVERITY_COLORS[gap.severity]}`,
-                                }}
-                            >
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", flexWrap: "wrap" }}>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap" }}>
-                                            <span style={{ fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", padding: "2px 8px", borderRadius: "100px", background: SEVERITY_COLORS[gap.severity] + "18", color: SEVERITY_COLORS[gap.severity] }}>
-                                                {gap.severity === 'critical' ? t('report.levels.non-conforme') : gap.severity === 'important' ? t('report.levels.partiel') : t('report.levels.conforme')}
-                                            </span>
-                                            <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>{t("report.priority")} {i + 1}</span>
+                            <FadeUp key={gap.id} delay={0.5 + i * 0.1}>
+                                <div
+                                    style={{
+                                        padding: "24px",
+                                        border: "1px solid var(--border)",
+                                        borderRadius: "16px",
+                                        background: "white",
+                                        borderLeft: `4px solid ${SEVERITY_COLORS[gap.severity]}`,
+                                        boxShadow: "0 2px 10px rgba(0,0,0,0.02)",
+                                        transition: "transform 0.2s ease",
+                                    }}
+                                >
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "20px", flexWrap: "wrap" }}>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", flexWrap: "wrap" }}>
+                                                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", padding: "3px 10px", borderRadius: "100px", background: SEVERITY_COLORS[gap.severity] + "15", color: SEVERITY_COLORS[gap.severity], textTransform: "uppercase" }}>
+                                                    {t(`report.levels.${gap.severity}` as any)}
+                                                </span>
+                                                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", padding: "3px 10px", borderRadius: "100px", background: "rgba(0,0,0,0.05)", color: "var(--text-muted)", textTransform: "uppercase" }}>
+                                                    {t(`report.impact_levels.${gap.impact}` as any)} {t("report.impact")}
+                                                </span>
+                                                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", padding: "3px 10px", borderRadius: "100px", background: "rgba(0,0,0,0.05)", color: "var(--text-muted)", textTransform: "uppercase" }}>
+                                                    {t("report.difficulty")} : {t(`report.difficulty_levels.${gap.difficulty}` as any)}
+                                                </span>
+                                            </div>
+                                            <p style={{ fontWeight: 700, color: "var(--gray-950)", fontSize: "17px", marginBottom: "8px", letterSpacing: "-0.01em" }}>
+                                                <AcronymTooltip text={gap.title} />
+                                            </p>
+                                            <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "16px", lineHeight: "1.5" }}>
+                                                <AcronymTooltip text={gap.description} />
+                                            </p>
+                                            <div style={{ padding: "12px 16px", background: "var(--green-50)", borderRadius: "8px", border: "1px solid var(--green-100)" }}>
+                                                <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--green-900)" }}>
+                                                    <span style={{ opacity: 0.7, marginRight: "4px" }}>→</span>{gap.action}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <p style={{ fontWeight: 600, color: "var(--gray-950)", fontSize: "15px", marginBottom: "6px" }}>{gap.title}</p>
-                                        <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "10px" }}>{gap.description}</p>
-                                        <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--green-900)" }}>
-                                            {t("report.action")} : {gap.action}
-                                        </p>
-                                    </div>
-                                    <div style={{ textAlign: "right", flexShrink: 0 }}>
-                                        <p style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "2px" }}>{t("report.delay")}</p>
-                                        <p style={{ fontWeight: 600, fontSize: "14px", color: "var(--gray-950)" }}>{gap.estimatedDays} {t("report.days")}</p>
-                                        {gap.estimatedCostUsd > 0 && (
-                                            <>
-                                                <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "6px", marginBottom: "2px" }}>{t("report.cost")}</p>
-                                                <p style={{ fontWeight: 600, fontSize: "14px", color: "var(--gray-950)" }}>{gap.estimatedCostUsd.toLocaleString()} USD</p>
-                                            </>
-                                        )}
+                                        <div style={{ textAlign: "right", flexShrink: 0, paddingLeft: "16px", borderLeft: "1px solid var(--border)" }}>
+                                            <p style={{ fontSize: "10px", fontWeight: 600, color: "var(--text-muted)", marginBottom: "4px", textTransform: "uppercase" }}>{t("report.delay")}</p>
+                                            <p style={{ fontWeight: 700, fontSize: "15px", color: "var(--gray-950)" }}>{gap.estimatedDays} {t("report.days")}</p>
+                                            {gap.estimatedCostUsd > 0 && (
+                                                <>
+                                                    <p style={{ fontSize: "10px", fontWeight: 600, color: "var(--text-muted)", marginTop: "12px", marginBottom: "4px", textTransform: "uppercase" }}>{t("report.cost")}</p>
+                                                    <p style={{ fontWeight: 800, fontSize: "16px", color: "var(--green-900)" }}>{gap.estimatedCostUsd.toLocaleString()} <span style={{ fontSize: '11px' }}>USD</span></p>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </FadeUp>
                         ))}
                     </div>
                 </div>
@@ -290,7 +308,8 @@ export default function ReportPage() {
                         {t("report.cta_desc")}
                     </p>
                 </div>
-                <div style={{ display: "flex", gap: "12px", flexDirection: "column", alignItems: "flex-start" }}>
+                <div style={{ display: "flex", gap: "16px", alignItems: "center", flexWrap: "wrap" }}>
+                    <PdfDownloadButton result={result} data={form} />
                     <Link
                         href="/contact"
                         style={{

@@ -13,10 +13,12 @@ import { sectors } from "@/data/sectors";
 import { DiagnosticData, calculateScore } from "@/lib/scoring";
 import { useTranslation } from "@/lib/i18n";
 import PhoneInput from "@/components/PhoneInput";
+import { FadeUp } from "@/components/animations/FadeUp";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
 const EMPTY_FORM: DiagnosticData = {
+    companyName: "",
     sector: "",
     companyType: "sarl",
     city: "",
@@ -71,35 +73,58 @@ type BoolField = "hasRccm" | "hasNif" | "hasCnss" | "hasInss" | "hasFiscalAttest
 
 const OBJECTIVES_BY_SECTOR: Record<string, { id: string; label: string }[]> = {
     btp: [
-        { id: "permis-construire", label: "Permis de construire" },
-        { id: "agrement-btp", label: "Agrément BTP" },
-        { id: "eie", label: "Étude d'impact env." },
-        { id: "marche-public-btp", label: "Marché public travaux" },
+        { id: "permis-construire", label: "data_objectives.permis-construire.label" },
+        { id: "agrement-btp", label: "data_objectives.agrement-btp.label" },
+        { id: "eie", label: "data_objectives.eie.label" },
+        { id: "marche-public-btp", label: "data_objectives.dossier-soumission.label" },
     ],
     "marches-publics": [
-        { id: "dossier-soumission", label: "Dossier de soumission" },
-        { id: "agrement-fournisseur", label: "Fournisseur de l'État" },
-        { id: "prequalification", label: "Pré-qualification secteur" },
+        { id: "dossier-soumission", label: "data_objectives.dossier-soumission.label" },
+        { id: "attestation-fiscale", label: "data_objectives.attestation-fiscale.label" },
+        { id: "attestation-cnss", label: "data_objectives.attestation-cnss.label" },
     ],
     "creation-entreprise": [
-        { id: "immatriculation-rccm", label: "Immatriculation RCCM" },
-        { id: "ouverture-compte", label: "Compte bancaire pro" },
-        { id: "mise-conformite", label: "Mise à jour légale" },
+        { id: "immatriculation-rccm", label: "data_objectives.immatriculation-rccm.label" },
+        { id: "numero-nif", label: "data_objectives.numero-nif.label" },
+        { id: "numero-inss", label: "data_objectives.numero-inss.label" },
     ],
     "import-export": [
-        { id: "licence-importation", label: "Licence d'importation" },
-        { id: "certificat-origine", label: "Certificat d'origine" },
-        { id: "agrement-exportateur", label: "Agrément exportateur" },
+        { id: "licence-importation", label: "data_objectives.licence-importation.label" },
+        { id: "certificat-conformite-import", label: "data_objectives.certificat-conformite-import.label" },
+        { id: "regime-douanier", label: "data_objectives.regime-douanier.label" },
     ],
     sante: [
-        { id: "pharmacie-autorisation", label: "Ouvrir une officine" },
-        { id: "clinique-agrement", label: "Agrément clinique" },
-        { id: "importation-medicaments", label: "Import médicaments DPM" },
+        { id: "pharmacie-autorisation", label: "data_objectives.pharmacie-autorisation.label" },
+        { id: "clinique-agrement", label: "data_objectives.clinique-agrement.label" },
     ],
     mines: [
-        { id: "permis-exploitation", label: "Permis d'exploitation" },
-        { id: "permis-recherche", label: "Permis de recherche" },
-        { id: "conformite-environnementale", label: "Conformité env." },
+        { id: "permis-recherche-miniere", label: "data_objectives.permis-recherche-miniere.label" },
+        { id: "droits-exploitation", label: "data_objectives.droits-exploitation.label" },
+        { id: "conformite-code-minier", label: "data_objectives.conformite-code-minier.label" },
+    ],
+    transport: [
+        { id: "immatriculation-flotte", label: "data_sectors.transport.name" },
+        { id: "permis-professionnel", label: "evaluation.step1.city_label" },
+    ],
+    telecoms: [
+        { id: "agrement-arptc", label: "data_sectors.telecoms.name" },
+        { id: "frequence-radio", label: "data_sectors.telecoms.desc" },
+    ],
+    education: [
+        { id: "agrement-epst", label: "data_sectors.education.name" },
+        { id: "ouverture-ecole", label: "data_sectors.education.desc" },
+    ],
+    agriculture: [
+        { id: "concession-agricole", label: "data_sectors.agriculture.name" },
+        { id: "certificat-phytosanitaire", label: "data_sectors.agriculture.desc" },
+    ],
+    securite: [
+        { id: "agrement-gardiennage", label: "data_sectors.securite.name" },
+        { id: "port-armes", label: "data_sectors.securite.desc" },
+    ],
+    finance: [
+        { id: "agrement-bcc", label: "data_sectors.finance.name" },
+        { id: "agrement-arca", label: "data_sectors.finance.desc" },
     ],
 };
 
@@ -275,6 +300,8 @@ export default function MobileDiagnosticForm() {
     const [form, setForm] = useState<DiagnosticData>(EMPTY_FORM);
     const [submitting, setSubmitting] = useState(false);
 
+    const isCreation = form.sector === "creation-entreprise";
+
     const update = (patch: Partial<DiagnosticData>) =>
         setForm((prev) => ({ ...prev, ...patch }));
 
@@ -285,10 +312,23 @@ export default function MobileDiagnosticForm() {
     };
 
     const handleNext = () => {
-        if (screen < TOTAL_SCREENS - 1) setScreen((s) => s + 1);
+        if (screen === 1 && isCreation) {
+            setScreen(3); // Skip Situation (2)
+        } else if (screen === 3 && isCreation) {
+            setScreen(5); // Skip Sector docs (4)
+        } else if (screen < TOTAL_SCREENS - 1) {
+            setScreen((s) => s + 1);
+        }
     };
+
     const handleBack = () => {
-        if (screen > 0) setScreen((s) => s - 1);
+        if (screen === 5 && isCreation) {
+            setScreen(3);
+        } else if (screen === 3 && isCreation) {
+            setScreen(1);
+        } else if (screen > 0) {
+            setScreen((s) => s - 1);
+        }
     };
 
     const handleSubmit = async () => {
@@ -327,6 +367,17 @@ export default function MobileDiagnosticForm() {
     ];
 
     // ── LAYOUT ────────────────────────────────────────────────────────────────
+    
+    // Calculate dynamic progress values
+    const totalVisibleScreens = isCreation ? 4 : TOTAL_SCREENS;
+    let currentStepNum = screen + 1;
+    if (isCreation) {
+        if (screen === 0) currentStepNum = 1;
+        else if (screen === 1) currentStepNum = 2;
+        else if (screen === 3) currentStepNum = 3;
+        else if (screen === 5) currentStepNum = 4;
+    }
+
     return (
         <div style={{
             width: "100%",
@@ -347,13 +398,13 @@ export default function MobileDiagnosticForm() {
                 flexShrink: 0,
             }}>
                 {/* Progress */}
-                <ProgressBar step={screen + 1} total={TOTAL_SCREENS} />
+                <ProgressBar step={currentStepNum} total={totalVisibleScreens} />
 
                 {/* Title row */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "16px", marginBottom: "4px" }}>
                     <div>
                         <p style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-900)", fontWeight: 600, margin: 0 }}>
-                            {t("mobile.diagnostic.step") || "Étape"} {screen + 1} / {TOTAL_SCREENS}
+                            {t("mobile.diagnostic.step") || "Étape"} {currentStepNum} / {totalVisibleScreens}
                         </p>
                         <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--white)", letterSpacing: "-0.02em", margin: "4px 0 0" }}>
                             {SCREEN_TITLES[screen]}
@@ -375,185 +426,197 @@ export default function MobileDiagnosticForm() {
 
                 {/* ── SCREEN 0: Secteur + Ville ── */}
                 {screen === 0 && (
-                    <>
-                        <div>
-                            <label style={labelSt}>{t("evaluation.step1.sector_label") || "Votre secteur"} <span style={{ color: "var(--green-900)" }}>*</span></label>
-                            <div style={{ position: "relative" }}>
-                                <select value={form.sector} onChange={(e) => update({ sector: e.target.value })} style={selectSt}>
-                                    <option value="">{t("mobile.diagnostic.choose_sector") || "Choisissez un secteur…"}</option>
-                                    {sectors.map((s) => <option key={s.id} value={s.id}>{t(s.name)}</option>)}
-                                </select>
-                                <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
+                    <FadeUp>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            <div>
+                                <label style={labelSt}>{t("evaluation.step1.sector_label") || "Votre secteur"} <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <div style={{ position: "relative" }}>
+                                    <select value={form.sector} onChange={(e) => update({ sector: e.target.value })} style={selectSt}>
+                                        <option value="">{t("mobile.diagnostic.choose_sector") || "Choisissez un secteur…"}</option>
+                                        {sectors.map((s) => <option key={s.id} value={s.id}>{t(s.name)}</option>)}
+                                    </select>
+                                    <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <label style={labelSt}>{t("evaluation.step1.city_label") || "Ville de domiciliation"} <span style={{ color: "var(--green-900)" }}>*</span></label>
-                            <div style={{ position: "relative" }}>
-                                <select value={form.city} onChange={(e) => update({ city: e.target.value })} style={selectSt}>
-                                    <option value="">{t("mobile.diagnostic.choose_city") || "Choisissez une ville…"}</option>
-                                    {CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                                </select>
-                                <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
+                            <div>
+                                <label style={labelSt}>{t("evaluation.step1.city_label") || "Ville de domiciliation"} <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <div style={{ position: "relative" }}>
+                                    <select value={form.city} onChange={(e) => update({ city: e.target.value })} style={selectSt}>
+                                        <option value="">{t("mobile.diagnostic.choose_city") || "Choisissez une ville…"}</option>
+                                        {CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                                    </select>
+                                    <div style={{ position: "absolute", right: "14px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--text-muted)", fontSize: "12px" }}>▼</div>
+                                </div>
                             </div>
+                            {(!form.sector || !form.city) && (
+                                <p style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "4px" }}>
+                                    {t("mobile.diagnostic.mandatory_fields") || "Ces deux champs sont obligatoires pour personnaliser votre diagnostic."}
+                                </p>
+                            )}
                         </div>
-                        {(!form.sector || !form.city) && (
-                            <p style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "4px" }}>
-                                {t("mobile.diagnostic.mandatory_fields") || "Ces deux champs sont obligatoires pour personnaliser votre diagnostic."}
-                            </p>
-                        )}
-                    </>
+                    </FadeUp>
                 )}
 
                 {/* ── SCREEN 1: Type + Taille ── */}
                 {screen === 1 && (
-                    <>
-                        <div>
-                            <label style={labelSt}>{t("mobile.diagnostic.type_structure") || "Type de structure"}</label>
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
-                                {COMPANY_TYPES.map((ct) => (
-                                    <Chip key={ct.value} label={ct.label} active={form.companyType === ct.value} onClick={() => update({ companyType: ct.value as DiagnosticData["companyType"] })} />
-                                ))}
+                    <FadeUp>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            <div>
+                                <label style={labelSt}>{t("mobile.diagnostic.type_structure") || "Type de structure"}</label>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
+                                    {COMPANY_TYPES.map((ct) => (
+                                        <Chip key={ct.value} label={ct.label} active={form.companyType === ct.value} onClick={() => update({ companyType: ct.value as DiagnosticData["companyType"] })} />
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <label style={labelSt}>{t("mobile.diagnostic.employee_count") || "Nombre d'employés"}</label>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "6px" }}>
+                                    {EMPLOYEE_COUNTS.map((ec) => (
+                                        <Chip key={ec.value} label={ec.label} active={form.employeeCount === ec.value} onClick={() => update({ employeeCount: ec.value as DiagnosticData["employeeCount"] })} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <label style={labelSt}>{t("mobile.diagnostic.employee_count") || "Nombre d'employés"}</label>
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "6px" }}>
-                                {EMPLOYEE_COUNTS.map((ec) => (
-                                    <Chip key={ec.value} label={ec.label} active={form.employeeCount === ec.value} onClick={() => update({ employeeCount: ec.value as DiagnosticData["employeeCount"] })} />
-                                ))}
-                            </div>
-                        </div>
-                    </>
+                    </FadeUp>
                 )}
 
                 {/* ── SCREEN 2: Situation actuelle ── */}
                 {screen === 2 && (
-                    <>
-                        <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
-                            {t("mobile.diagnostic.check_docs_owned") || "Cochez les documents que vous possédez déjà."}
-                        </p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                            {BASE_DOCS.map((doc) => (
-                                <ToggleRow
-                                    key={doc.id}
-                                    label={doc.label}
-                                    desc={doc.desc}
-                                    checked={form[doc.id as BoolField]}
-                                    onClick={() => update({ [doc.id]: !form[doc.id as BoolField] })}
-                                />
-                            ))}
+                    <FadeUp>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
+                                {t("mobile.diagnostic.check_docs_owned") || "Cochez les documents que vous possédez déjà."}
+                            </p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                {BASE_DOCS.map((doc) => (
+                                    <ToggleRow
+                                        key={doc.id}
+                                        label={doc.label}
+                                        desc={doc.desc}
+                                        checked={form[doc.id as BoolField]}
+                                        onClick={() => update({ [doc.id]: !form[doc.id as BoolField] })}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </>
+                    </FadeUp>
                 )}
 
                 {/* ── SCREEN 3: Objectifs ── */}
                 {screen === 3 && (
-                    <>
-                        <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
-                            {t("mobile.diagnostic.select_objectives") || "Sélectionnez vos objectifs de conformité."}
-                        </p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                            {objectives.map((obj) => {
-                                const selected = form.objectives.includes(obj.id);
-                                return (
-                                    <ToggleRow
-                                        key={obj.id}
-                                        label={obj.label}
-                                        desc=""
-                                        checked={selected}
-                                        onClick={() => {
-                                            const current = form.objectives;
-                                            const updated = current.includes(obj.id)
-                                                ? current.filter((o) => o !== obj.id)
-                                                : [...current, obj.id];
-                                            update({ objectives: updated });
-                                        }}
-                                    />
-                                );
-                            })}
+                    <FadeUp>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
+                                {t("mobile.diagnostic.select_objectives") || "Sélectionnez vos objectifs de conformité."}
+                            </p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                {objectives.map((obj) => {
+                                    const selected = form.objectives.includes(obj.id);
+                                    return (
+                                        <ToggleRow
+                                            key={obj.id}
+                                            label={obj.label}
+                                            desc=""
+                                            checked={selected}
+                                            onClick={() => {
+                                                const current = form.objectives;
+                                                const updated = current.includes(obj.id)
+                                                    ? current.filter((o) => o !== obj.id)
+                                                    : [...current, obj.id];
+                                                update({ objectives: updated });
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </>
+                    </FadeUp>
                 )}
 
                 {/* ── SCREEN 4: Documents ── */}
                 {screen === 4 && (
-                    <>
-                        <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
-                            {t("mobile.diagnostic.docs_already_obtained") || "Documents déjà obtenus pour votre secteur."}
-                        </p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                            {documents.map((doc) => {
-                                const checked = form.documentsObtained.includes(doc.id);
-                                return (
-                                    <ToggleRow
-                                        key={doc.id}
-                                        label={doc.label}
-                                        desc=""
-                                        checked={checked}
-                                        onClick={() => {
-                                            const current = form.documentsObtained;
-                                            const updated = current.includes(doc.id)
-                                                ? current.filter((d) => d !== doc.id)
-                                                : [...current, doc.id];
-                                            update({ documentsObtained: updated });
-                                        }}
-                                    />
-                                );
-                            })}
+                    <FadeUp>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0 }}>
+                                {t("mobile.diagnostic.docs_already_obtained") || "Documents déjà obtenus pour votre secteur."}
+                            </p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                {documents.map((doc) => {
+                                    const checked = form.documentsObtained.includes(doc.id);
+                                    return (
+                                        <ToggleRow
+                                            key={doc.id}
+                                            label={doc.label}
+                                            desc=""
+                                            checked={checked}
+                                            onClick={() => {
+                                                const current = form.documentsObtained;
+                                                const updated = current.includes(doc.id)
+                                                    ? current.filter((d) => d !== doc.id)
+                                                    : [...current, doc.id];
+                                                update({ documentsObtained: updated });
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </>
+                    </FadeUp>
                 )}
 
                 {/* ── SCREEN 5: Contact ── */}
                 {screen === 5 && (
-                    <>
-                        <div style={{
-                            padding: "12px 16px",
-                            background: "rgba(16,185,129,0.05)",
-                            border: "1px solid rgba(16,185,129,0.2)",
-                            borderRadius: "10px",
-                        }}>
-                            <p style={{ fontSize: "13px", color: "var(--green-900)", fontWeight: 600, margin: "0 0 4px" }}>
-                                {t("mobile.diagnostic.almost_done") || "Presque terminé !"}
-                            </p>
-                            <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0, lineHeight: "1.5" }}>
-                                {t("mobile.diagnostic.receive_report") || "Recevez votre rapport personnalisé sur WhatsApp dans les 24h."}
-                            </p>
+                    <FadeUp>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            <div style={{
+                                padding: "12px 16px",
+                                background: "rgba(16,185,129,0.05)",
+                                border: "1px solid rgba(16,185,129,0.2)",
+                                borderRadius: "10px",
+                            }}>
+                                <p style={{ fontSize: "13px", color: "var(--green-900)", fontWeight: 600, margin: "0 0 4px" }}>
+                                    {t("mobile.diagnostic.almost_done") || "Presque terminé !"}
+                                </p>
+                                <p style={{ fontSize: "13px", color: "var(--text-secondary)", margin: 0, lineHeight: "1.5" }}>
+                                    {t("mobile.diagnostic.receive_report") || "Recevez votre rapport personnalisé sur WhatsApp dans les 24h."}
+                                </p>
+                            </div>
+                            <div>
+                                <label style={labelSt}>Prénom / Nom <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <input
+                                    type="text"
+                                    value={form.contactName}
+                                    onChange={(e) => update({ contactName: e.target.value })}
+                                    placeholder="Jean Mbeki"
+                                    style={inputSt}
+                                    onFocus={(e) => { e.target.style.borderColor = "var(--green-900)"; }}
+                                    onBlur={(e) => { e.target.style.borderColor = "var(--border)"; }}
+                                />
+                            </div>
+                            <div>
+                                <label style={labelSt}>Numéro WhatsApp <span style={{ color: "var(--green-900)" }}>*</span></label>
+                                <PhoneInput
+                                    value={form.contactPhone}
+                                    onChange={(val) => update({ contactPhone: val })}
+                                    placeholder="Votre numéro WhatsApp"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label style={labelSt}>Email <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 400 }}>(optionnel)</span></label>
+                                <input
+                                    type="email"
+                                    value={form.contactEmail ?? ""}
+                                    onChange={(e) => update({ contactEmail: e.target.value })}
+                                    placeholder="votre@email.com"
+                                    style={inputSt}
+                                    onFocus={(e) => { e.target.style.borderColor = "var(--green-900)"; }}
+                                    onBlur={(e) => { e.target.style.borderColor = "var(--border)"; }}
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label style={labelSt}>Prénom / Nom <span style={{ color: "var(--green-900)" }}>*</span></label>
-                            <input
-                                type="text"
-                                value={form.contactName}
-                                onChange={(e) => update({ contactName: e.target.value })}
-                                placeholder="Jean Mbeki"
-                                style={inputSt}
-                                onFocus={(e) => { e.target.style.borderColor = "var(--green-900)"; }}
-                                onBlur={(e) => { e.target.style.borderColor = "var(--border)"; }}
-                            />
-                        </div>
-                        <div>
-                            <label style={labelSt}>Numéro WhatsApp <span style={{ color: "var(--green-900)" }}>*</span></label>
-                            <PhoneInput
-                                value={form.contactPhone}
-                                onChange={(val) => update({ contactPhone: val })}
-                                placeholder="Votre numéro WhatsApp"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label style={labelSt}>Email <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 400 }}>(optionnel)</span></label>
-                            <input
-                                type="email"
-                                value={form.contactEmail ?? ""}
-                                onChange={(e) => update({ contactEmail: e.target.value })}
-                                placeholder="votre@email.com"
-                                style={inputSt}
-                                onFocus={(e) => { e.target.style.borderColor = "var(--green-900)"; }}
-                                onBlur={(e) => { e.target.style.borderColor = "var(--border)"; }}
-                            />
-                        </div>
-                    </>
+                    </FadeUp>
                 )}
             </div>
 

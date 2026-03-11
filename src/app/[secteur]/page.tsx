@@ -13,9 +13,31 @@ export async function generateMetadata({ params }: { params: Promise<{ secteur: 
     const { secteur } = await params;
     const sector = getSectorById(secteur);
     if (!sector) return {};
+
+    const sectorName = tServer(sector.name);
+    const sectorDesc = tServer(sector.description);
+    const url = `https://agrea.africa/${secteur}`;
+    const title = `${sectorName} — Démarches administratives en RDC`;
+
     return {
-        title: `${tServer(sector.name)} — Démarches administratives en RDC | Agréa`,
-        description: tServer(sector.description),
+        title,
+        description: sectorDesc,
+        keywords: `${sectorName}, agrément ${sectorName} RDC, conformité ${sectorName} Congo, démarches ${sectorName} Kinshasa`,
+        alternates: { canonical: url },
+        openGraph: {
+            title,
+            description: sectorDesc,
+            url,
+            siteName: "Agréa Africa",
+            locale: "fr_CD",
+            type: "website",
+            images: [{ url: "https://agrea.africa/og-default.png", width: 1200, height: 630 }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description: sectorDesc,
+        },
     };
 }
 

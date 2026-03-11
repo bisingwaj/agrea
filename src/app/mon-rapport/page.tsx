@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ReportPage from "@/components/report/ReportPage";
+import MonRapportClientSwitch from "@/components/report/MonRapportClientSwitch";
 
 export const metadata: Metadata = {
     title: "Mon rapport de conformité — Agréa Africa",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function MonRapportPage() {
-    return <ReportPage />;
+    return <MonRapportClientSwitch />;
 }

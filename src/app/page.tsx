@@ -6,8 +6,8 @@ import MobileHomePage from "@/components/mobile/MobileHomePage";
 // Desktop static page content (imported inline for simplicity)
 import Link from "next/link";
 import { useTranslation } from "@/lib/i18n";
-import { sectors } from "@/data/sectors";
-import { Building2, Mountain, Leaf, Truck, Zap, Monitor, Stethoscope, ShoppingCart, Landmark, Factory, Utensils, GraduationCap, ChevronRight } from "lucide-react";
+import { industrySectors, creationSector } from "@/data/sectors";
+import { Building2, Mountain, Leaf, Truck, Zap, Monitor, Stethoscope, ShoppingCart, Landmark, Factory, Utensils, GraduationCap, ChevronRight, Briefcase } from "lucide-react";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { StaggerReveal } from "@/components/animations/StaggerReveal";
@@ -143,8 +143,34 @@ function DesktopHomePage() {
             </div>
           </FadeUp>
           <StaggerReveal staggerDelay={0.08}>
+            <div style={{ marginBottom: "40px" }}>
+              <Link href={`/${creationSector.id}`} className="card glow-card" style={{ display: "flex", padding: "40px", textDecoration: "none", cursor: "pointer", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(0,0,0,0) 100%)", border: "1px solid rgba(16, 185, 129, 0.2)", position: "relative", overflow: "hidden", alignItems: "center" }}>
+                <div style={{ display: "flex", width: "100%", gap: "32px", alignItems: "center" }}>
+                   <div style={{ width: "80px", height: "80px", borderRadius: "20px", background: "rgba(16, 185, 129, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                     <Briefcase size={40} color="var(--green-900)" strokeWidth={1.5} />
+                   </div>
+                   <div style={{ flexGrow: 1 }}>
+                     <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
+                       <span style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--green-900)", fontWeight: 600 }}>Nouveau Projet</span>
+                     </div>
+                     <h3 style={{ marginBottom: "12px", fontSize: "28px", color: "var(--white)", fontWeight: 500 }}>{t(`sectors.${creationSector.id}.name` as any)}</h3>
+                     <p style={{ fontSize: "16px", lineHeight: "1.6", color: "var(--text-secondary)", maxWidth: "80%" }}>{t(`sectors.${creationSector.id}.desc` as any)}</p>
+                   </div>
+                   <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "var(--green-900)", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease", flexShrink: 0 }}>
+                     <ChevronRight size={24} color="var(--white)" />
+                   </div>
+                </div>
+              </Link>
+            </div>
+            
+            <div style={{ marginBottom: "32px" }}>
+               <h3 style={{ fontSize: "24px", fontWeight: 500, color: "var(--white)" }}>Ou choisissez votre secteur d'activité</h3>
+            </div>
+          </StaggerReveal>
+
+          <StaggerReveal staggerDelay={0.08}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
-              {sectors.map((sector) => {
+              {industrySectors.map((sector) => {
                 const Icon = iconMap[sector.icon] || Building2;
                 return (
                   <Link key={sector.id} href={`/${sector.id}`} className="card glow-card" style={{ display: "flex", padding: "40px", textDecoration: "none", cursor: "pointer", height: "100%", flexDirection: "column" }}>

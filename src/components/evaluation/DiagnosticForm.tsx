@@ -14,6 +14,7 @@ import Step5Confirmation from "./Step5Confirmation";
 import { useTranslation } from "@/lib/i18n";
 
 const EMPTY_FORM: DiagnosticData = {
+    companyName: "",
     sector: "",
     companyType: "sarl",
     city: "",

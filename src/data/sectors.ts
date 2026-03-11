@@ -9,23 +9,24 @@ export interface Sector {
     objectives: string[];
 }
 
-export const sectors: Sector[] = [
-    {
-        id: "creation-entreprise",
-        name: "data_sectors.creation-entreprise.name",
-        description: "data_sectors.creation-entreprise.description",
-        icon: "Briefcase",
-        color: "#0D5C3A",
-        sheetName: "01 — CREATION ENTREPRISE",
-        objectivesCount: 7,
-        objectives: [
-            "data_sectors.creation-entreprise.objectives_list.0",
-            "data_sectors.creation-entreprise.objectives_list.1",
-            "data_sectors.creation-entreprise.objectives_list.2",
-            "data_sectors.creation-entreprise.objectives_list.3",
-            "data_sectors.creation-entreprise.objectives_list.4"
-        ]
-    },
+export const creationSector: Sector = {
+    id: "creation-entreprise",
+    name: "data_sectors.creation-entreprise.name",
+    description: "data_sectors.creation-entreprise.description",
+    icon: "Briefcase",
+    color: "#0D5C3A",
+    sheetName: "01 — CREATION ENTREPRISE",
+    objectivesCount: 7,
+    objectives: [
+        "data_sectors.creation-entreprise.objectives_list.0",
+        "data_sectors.creation-entreprise.objectives_list.1",
+        "data_sectors.creation-entreprise.objectives_list.2",
+        "data_sectors.creation-entreprise.objectives_list.3",
+        "data_sectors.creation-entreprise.objectives_list.4"
+    ]
+};
+
+export const industrySectors: Sector[] = [
     {
         id: "btp",
         name: "data_sectors.btp.name",
@@ -203,6 +204,8 @@ export const sectors: Sector[] = [
         ]
     },
 ];
+
+export const sectors: Sector[] = [creationSector, ...industrySectors];
 
 export function getSectorById(id: string): Sector | undefined {
     return sectors.find((s) => s.id === id);
